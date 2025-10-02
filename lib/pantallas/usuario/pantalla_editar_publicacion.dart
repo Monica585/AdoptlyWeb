@@ -20,6 +20,7 @@ class _PantallaEditarPublicacionState extends State<PantallaEditarPublicacion> {
   late TextEditingController edadController;
   late TextEditingController descripcionController;
   String estadoSeleccionado = 'Disponible';
+  String tipoSeleccionado = 'Perro';
 
   XFile? nuevaImagen;
   Uint8List? imagenWeb;
@@ -33,6 +34,7 @@ class _PantallaEditarPublicacionState extends State<PantallaEditarPublicacion> {
     edadController = TextEditingController(text: widget.mascota.edad);
     descripcionController = TextEditingController(text: widget.mascota.descripcion);
     estadoSeleccionado = widget.mascota.estado;
+    tipoSeleccionado = widget.mascota.tipo;
   }
 
   Future<void> seleccionarImagen() async {
@@ -58,7 +60,21 @@ class _PantallaEditarPublicacionState extends State<PantallaEditarPublicacion> {
   }
 
   void guardarCambios() {
+    // Crear una nueva mascota con los datos actualizados
+    final mascotaActualizada = Mascota(
+      id: widget.mascota.id,
+      nombre: nombreController.text,
+      tipo: tipoSeleccionado,
+      raza: razaController.text,
+      edad: edadController.text,
+      imagen: nuevaImagen != null ? nuevaImagen!.path : widget.mascota.imagen,
+      descripcion: descripcionController.text,
+      estado: estadoSeleccionado,
+    );
+    
     // Aquí podrías actualizar la mascota en tu base de datos o provider
+    // Por ejemplo: Provider.of<PublicacionesProvider>(context, listen: false).actualizarMascota(mascotaActualizada);
+    
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Cambios guardados')),
     );
@@ -105,6 +121,19 @@ class _PantallaEditarPublicacionState extends State<PantallaEditarPublicacion> {
               decoration: const InputDecoration(labelText: 'Descripción'),
             ),
             const SizedBox(height: 20),
+            DropdownButtonFormField<String>(
+              value: tipoSeleccionado,
+              items: const [
+                DropdownMenuItem(value: 'Perro', child: Text('Perro')),
+                DropdownMenuItem(value: 'Gato', child: Text('Gato')),
+                DropdownMenuItem(value: 'Otro', child: Text('Otro')),
+              ],
+              onChanged: (value) {
+                if (value != null) setState(() => tipoSeleccionado = value);
+              },
+              decoration: const InputDecoration(labelText: 'Tipo'),
+            ),
+            const SizedBox(height: 10),
             DropdownButtonFormField<String>(
               value: estadoSeleccionado,
               items: const [

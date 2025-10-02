@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../modelos/solicitud_adopcion.dart';
+import '../modelos/solicitudAdopcion.dart';
 import '../modelos/mascota.dart';
 
 class SolicitudesProvider with ChangeNotifier {
@@ -16,7 +16,7 @@ class SolicitudesProvider with ChangeNotifier {
         descripcion: 'Max es un perro cariñoso y juguetón.',
         estado: 'Disponible',
       ),
-      estado: 'Pendiente',
+      estado: EstadoSolicitud.pendiente,
       fecha: DateTime.now().subtract(const Duration(days: 2)),
     ),
     SolicitudAdopcion(
@@ -31,7 +31,7 @@ class SolicitudesProvider with ChangeNotifier {
         descripcion: 'Luna es dulce y curiosa.',
         estado: 'Disponible',
       ),
-      estado: 'Aprobada',
+      estado: EstadoSolicitud.aprobada,
       fecha: DateTime.now().subtract(const Duration(days: 5)),
     ),
   ];

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 // Providers
 import 'providers/favoritos_provider.dart';
 import 'providers/publicaciones_provider.dart';
-import 'providers/solicitudes_provider.dart'; // ✅ NUEVO
+import 'providers/solicitudes_provider.dart';
 
 // Autenticación
 import 'pantallas/autenticacion/pantalla_bienvenida.dart';
@@ -18,12 +18,15 @@ import 'pantallas/autenticacion/pantalla_recuperar_contrasena.dart';
 import 'pantallas/usuario/pantalla_inicio.dart';
 import 'pantallas/usuario/pantalla_favoritos.dart';
 import 'pantallas/usuario/pantalla_perfil.dart';
+import 'pantallas/usuario/pantalla_editar_perfil.dart';           // ✅ NUEVO
+import 'pantallas/usuario/pantalla_cambiar_contrasena.dart';      // ✅ NUEVO
 import 'pantallas/usuario/pantalla_mis_solicitudes.dart';
 import 'pantallas/usuario/pantalla_notificaciones.dart';
 import 'pantallas/usuario/pantalla_publicar_mascota.dart';
 import 'pantallas/usuario/pantalla_mis_publicaciones.dart';
 import 'pantallas/usuario/pantalla_menu_usuario.dart';
 import 'pantallas/usuario/pantalla_informacion_contacto.dart';
+import 'pantallas/usuario/pantalla_catalogo_mascotas.dart';
 
 // Administrador
 import 'pantallas/administrador/pantalla_panel_admin.dart';
@@ -39,7 +42,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => FavoritosProvider()),
         ChangeNotifierProvider(create: (_) => PublicacionesProvider()),
-        ChangeNotifierProvider(create: (_) => SolicitudesProvider()), // ✅ REGISTRADO
+        ChangeNotifierProvider(create: (_) => SolicitudesProvider()),
       ],
       child: const AdoptlyApp(),
     ),
@@ -81,6 +84,10 @@ class AdoptlyApp extends StatelessWidget {
         '/menu': (context) => const PantallaMenuUsuario(),
         '/infoContacto': (context) => const PantallaInformacionContacto(),
         '/favoritos': (context) => const PantallaFavoritos(),
+        '/buscar': (context) => const PantallaCatalogoMascotas(),
+        '/perfil': (context) => const PantallaPerfil(),
+        '/editarPerfil': (context) => const PantallaEditarPerfil(),               // ✅ NUEVO
+        '/cambiarContrasena': (context) => const PantallaCambiarContrasena(),     // ✅ NUEVO
 
         // Administrador
         '/adminPanel': (context) => const PantallaPanelAdmin(),

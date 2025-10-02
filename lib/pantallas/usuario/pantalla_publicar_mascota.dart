@@ -1,9 +1,5 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io'; // Para Android
-import 'dart:typed_data'; // Para Web
-import 'package:flutter/foundation.dart'; // Para detectar si es Web
-
 import 'pantalla_confirmar_publicacion.dart';
 import 'pantalla_publicacion_pendiente.dart';
 
@@ -11,7 +7,8 @@ class PantallaPublicarMascota extends StatefulWidget {
   const PantallaPublicarMascota({super.key});
 
   @override
-  State<PantallaPublicarMascota> createState() => _PantallaPublicarMascotaState();
+  State<PantallaPublicarMascota> createState() =>
+      _PantallaPublicarMascotaState();
 }
 
 class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
@@ -21,6 +18,7 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
   final razaController = TextEditingController();
   final edadController = TextEditingController();
   final descripcionController = TextEditingController();
+  String tipoSeleccionado = 'Perro'; //  Campo tipo
 
   final nombreContactoController = TextEditingController();
   final telefonoController = TextEditingController();
@@ -28,7 +26,6 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
   final ubicacionController = TextEditingController();
 
   XFile? imagenSeleccionada;
-  Uint8List? imagenWeb;
   final ImagePicker _picker = ImagePicker();
 
   Future<void> seleccionarImagen() async {
@@ -37,9 +34,6 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
       setState(() {
         imagenSeleccionada = imagen;
       });
-      if (kIsWeb) {
-        imagenWeb = await imagen.readAsBytes(); // Para mostrar en Web
-      }
     }
   }
 
@@ -66,6 +60,7 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
       MaterialPageRoute(
         builder: (_) => PantallaConfirmarPublicacion(
           nombre: nombreController.text,
+          tipo: tipoSeleccionado, //  Se pasa el tipo seleccionado
           raza: razaController.text,
           edad: edadController.text,
           descripcion: descripcionController.text,
@@ -85,7 +80,7 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
 
   Widget campoTexto(String label, TextEditingController controller, {int maxLines = 1}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
         controller: controller,
         maxLines: maxLines,
@@ -93,14 +88,15 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
           hintText: label,
           filled: true,
           fillColor: Colors.grey[100],
-          hintStyle: const TextStyle(color: Colors.black54),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide.none,
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         ),
-        validator: (value) => value == null || value.trim().isEmpty ? 'Este campo es obligatorio' : null,
+        validator: (value) => value == null || value.trim().isEmpty
+            ? 'Este campo es obligatorio'
+            : null,
       ),
     );
   }
@@ -112,26 +108,19 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
         width: double.infinity,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+          border: Border.all(color: Colors.grey, width: 1.2),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey.shade400),
         ),
         child: Column(
           children: [
             imagenSeleccionada != null
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: kIsWeb
-                        ? Image.memory(
-                            imagenWeb!,
-                            height: 150,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.file(
-                            File(imagenSeleccionada!.path),
-                            height: 150,
-                            fit: BoxFit.cover,
-                          ),
+                    child: Image.network(
+                      imagenSeleccionada!.path,
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
                   )
                 : const Column(
                     children: [
@@ -139,7 +128,9 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
                       SizedBox(height: 8),
                       Text("Subir foto", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                       SizedBox(height: 4),
-                      Text("Selecciona la foto para mostrar el animal", textAlign: TextAlign.center, style: TextStyle(color: Colors.black54)),
+                      Text("Seleccione la foto para mostrar al animal",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.black54)),
                     ],
                   ),
           ],
@@ -148,10 +139,36 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
     );
   }
 
+  Widget campoTipoAnimal() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: DropdownButtonFormField<String>(
+        value: tipoSeleccionado,
+        items: const [
+          DropdownMenuItem(value: 'Perro', child: Text('Perro')),
+          DropdownMenuItem(value: 'Gato', child: Text('Gato')),
+          DropdownMenuItem(value: 'Otro', child: Text('Otro')),
+        ],
+        onChanged: (value) {
+          if (value != null) setState(() => tipoSeleccionado = value);
+        },
+        decoration: InputDecoration(
+          labelText: 'Tipo de animal',
+          filled: true,
+          fillColor: Colors.grey[100],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text('Dar en adopción'),
         backgroundColor: const Color.fromARGB(255, 76, 172, 175),
@@ -163,25 +180,22 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Información del animal', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
               campoTexto('Nombre del animal', nombreController),
+              campoTipoAnimal(), // ✅ Campo tipo integrado
               campoTexto('Raza', razaController),
               campoTexto('Edad', edadController),
               campoTexto('Descripción', descripcionController, maxLines: 3),
-
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               widgetSubirFoto(),
-
-              const SizedBox(height: 30),
-              const Text('Información del contacto', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 20),
+              const Text("Información de contacto",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               campoTexto('Nombre', nombreContactoController),
               campoTexto('Teléfono', telefonoController),
-              campoTexto('Correo electrónico', correoController),
+              campoTexto('Correo Electrónico', correoController),
               campoTexto('Ubicación', ubicacionController),
-
-              const SizedBox(height: 30),
+              const SizedBox(height: 25),
               ElevatedButton(
                 onPressed: enviar,
                 style: ElevatedButton.styleFrom(
@@ -189,7 +203,8 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                child: const Text('Dar en adopción...', style: TextStyle(color: Colors.white, fontSize: 16)),
+                child: const Text('Dar en adopción...',
+                    style: TextStyle(color: Colors.white, fontSize: 16)),
               ),
             ],
           ),

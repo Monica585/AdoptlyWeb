@@ -17,6 +17,7 @@ class _PantallaMascotasDisponiblesState
     Mascota(
         id: '1',
         nombre: 'Max',
+        tipo: 'Perro',
         raza: 'Golden Retriever',
         edad: '4 años',
         imagen: 'assets/images/max.png',
@@ -25,6 +26,7 @@ class _PantallaMascotasDisponiblesState
     Mascota(
         id: '2',
         nombre: 'Luna',
+        tipo: 'Perro',
         raza: 'Samoyedo',
         edad: '3 años',
         imagen: 'assets/images/luna.png',
@@ -33,6 +35,7 @@ class _PantallaMascotasDisponiblesState
     Mascota(
         id: '3',
         nombre: 'Rocky',
+        tipo: 'Perro',
         raza: 'Labrador',
         edad: '5 años',
         imagen: 'assets/images/rocky.png',
@@ -41,6 +44,7 @@ class _PantallaMascotasDisponiblesState
     Mascota(
         id: '4',
         nombre: 'Milo',
+        tipo: 'Gato',
         raza: 'Gato doméstico',
         edad: '2 años',
         imagen: 'assets/images/milo.png',
@@ -49,6 +53,7 @@ class _PantallaMascotasDisponiblesState
     Mascota(
         id: '5',
         nombre: 'Nube',
+        tipo: 'Otro',
         raza: 'Conejo',
         edad: '1 año',
         imagen: 'assets/images/nube.png',

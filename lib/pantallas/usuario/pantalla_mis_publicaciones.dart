@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 // Providers
 import '../../modelos/mascota.dart';
+import '../../modelos/solicitudAdopcion.dart';
 import '../../providers/publicaciones_provider.dart';
 import '../../providers/solicitudes_provider.dart';
 
@@ -35,9 +36,9 @@ class PantallaMisPublicaciones extends StatelessWidget {
                 if (solicitudes.isEmpty) {
                   resumenSolicitudes = 'Sin solicitudes';
                 } else {
-                  final pendientes = solicitudes.where((s) => s.estado.toLowerCase() == 'pendiente').length;
-                  final aprobadas = solicitudes.where((s) => s.estado.toLowerCase() == 'aprobada').length;
-                  final rechazadas = solicitudes.where((s) => s.estado.toLowerCase() == 'rechazada').length;
+                  final pendientes = solicitudes.where((s) => s.estado == EstadoSolicitud.pendiente).length;
+                  final aprobadas = solicitudes.where((s) => s.estado == EstadoSolicitud.aprobada).length;
+                  final rechazadas = solicitudes.where((s) => s.estado == EstadoSolicitud.rechazada).length;
                   resumenSolicitudes =
                       'Solicitudes: $pendientes pendientes, $aprobadas aprobadas, $rechazadas rechazadas';
                 }
@@ -85,10 +86,18 @@ class PantallaMisPublicaciones extends StatelessWidget {
         unselectedItemColor: Colors.grey,
         onTap: (index) {
           switch (index) {
-            case 0: Navigator.pushNamed(context, '/home'); break;
-            case 1: Navigator.pushNamed(context, '/buscar'); break;
-            case 2: Navigator.pushNamed(context, '/favoritos'); break;
-            case 3: Navigator.pushNamed(context, '/perfil'); break;
+            case 0:
+              Navigator.pushReplacementNamed(context, '/home');
+              break;
+            case 1:
+              Navigator.pushReplacementNamed(context, '/buscar');
+              break;
+            case 2:
+              Navigator.pushReplacementNamed(context, '/favoritos');
+              break;
+            case 3:
+              Navigator.pushReplacementNamed(context, '/perfil');
+              break;
           }
         },
         items: const [

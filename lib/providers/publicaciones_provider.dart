@@ -7,6 +7,7 @@ class PublicacionesProvider with ChangeNotifier {
     Mascota(
       id: '1',
       nombre: 'Max',
+      tipo: 'Perro',
       raza: 'Golden Retriever',
       edad: '4 años',
       imagen: 'assets/images/max.png',
@@ -16,6 +17,7 @@ class PublicacionesProvider with ChangeNotifier {
     Mascota(
       id: '2',
       nombre: 'Bella',
+      tipo: 'Gato',
       raza: 'Gato Persa',
       edad: '2 años',
       imagen: 'assets/images/bella.png',
@@ -25,6 +27,7 @@ class PublicacionesProvider with ChangeNotifier {
     Mascota(
       id: '3',
       nombre: 'Rocky',
+      tipo: 'Perro',
       raza: 'Labrador',
       edad: '5 años',
       imagen: 'assets/images/rocky.png',
@@ -34,6 +37,7 @@ class PublicacionesProvider with ChangeNotifier {
     Mascota(
       id: '4',
       nombre: 'Luna',
+      tipo: 'Gato',
       raza: 'Gato Siamés',
       edad: '3 años',
       imagen: 'assets/images/luna.png',

@@ -18,6 +18,7 @@ class _PantallaCatalogoMascotasState extends State<PantallaCatalogoMascotas> {
     Mascota(
         id: 'max',
         nombre: 'Max',
+        tipo: 'Perro',
         raza: 'Golden Retriever',
         edad: '4 años',
         imagen: 'assets/images/max.png',
@@ -26,6 +27,7 @@ class _PantallaCatalogoMascotasState extends State<PantallaCatalogoMascotas> {
     Mascota(
         id: 'luna',
         nombre: 'Luna',
+        tipo: 'Perro',
         raza: 'Samoyedo',
         edad: '3 años',
         imagen: 'assets/images/luna.png',
@@ -34,6 +36,7 @@ class _PantallaCatalogoMascotasState extends State<PantallaCatalogoMascotas> {
     Mascota(
         id: 'rocky',
         nombre: 'Rocky',
+        tipo: 'Perro',
         raza: 'Labrador',
         edad: '5 años',
         imagen: 'assets/images/rocky.png',
@@ -42,6 +45,7 @@ class _PantallaCatalogoMascotasState extends State<PantallaCatalogoMascotas> {
     Mascota(
         id: 'milo',
         nombre: 'Milo',
+        tipo: 'Gato',
         raza: 'Gato doméstico',
         edad: '2 años',
         imagen: 'assets/images/milo.png',
@@ -50,6 +54,7 @@ class _PantallaCatalogoMascotasState extends State<PantallaCatalogoMascotas> {
     Mascota(
         id: 'nube',
         nombre: 'Nube',
+        tipo: 'Otro',
         raza: 'Conejo',
         edad: '1 año',
         imagen: 'assets/images/nube.png',
@@ -66,11 +71,9 @@ class _PantallaCatalogoMascotasState extends State<PantallaCatalogoMascotas> {
           m.raza.toLowerCase().contains(textoBusqueda.toLowerCase());
 
       final coincideTipo = filtroTipo == 'Todos' ||
-          (filtroTipo == 'Perros' &&
-              !m.raza.toLowerCase().contains('gato') &&
-              !m.raza.toLowerCase().contains('conejo')) ||
-          (filtroTipo == 'Gatos' && m.raza.toLowerCase().contains('gato')) ||
-          (filtroTipo == 'Otros' && m.raza.toLowerCase().contains('conejo'));
+          (filtroTipo == 'Perros' && m.tipo == 'Perro') ||
+          (filtroTipo == 'Gatos' && m.tipo == 'Gato') ||
+          (filtroTipo == 'Otros' && m.tipo == 'Otro');
 
       return coincideBusqueda && coincideTipo;
     }).toList();

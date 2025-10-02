@@ -6,6 +6,7 @@ import 'dart:io';
 
 class PantallaConfirmarPublicacion extends StatelessWidget {
   final String nombre;
+  final String tipo;
   final String raza;
   final String edad;
   final String descripcion;
@@ -15,6 +16,7 @@ class PantallaConfirmarPublicacion extends StatelessWidget {
   const PantallaConfirmarPublicacion({
     super.key,
     required this.nombre,
+    required this.tipo,
     required this.raza,
     required this.edad,
     required this.descripcion,
@@ -119,6 +121,8 @@ class PantallaConfirmarPublicacion extends StatelessWidget {
                   Column(
                     children: [
                       _buildInfoRow('Nombre', nombre),
+                      const SizedBox(height: 12),
+                      _buildInfoRow('Tipo', tipo),
                       const SizedBox(height: 12),
                       _buildInfoRow('Raza', raza),
                       const SizedBox(height: 12),
