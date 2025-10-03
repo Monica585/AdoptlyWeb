@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
-import 'dart:io';
-import '../../modelos/mascota.dart';
-import '../../providers/publicaciones_provider.dart';
+import '../../../modelos/mascota.dart';
+import '../../../providers/publicaciones_provider.dart';
 import 'pantalla_detalle_mascota.dart';
 import 'pantalla_menu_usuario.dart';
 

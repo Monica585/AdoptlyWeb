@@ -1,13 +1,11 @@
 ﻿import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
-import 'dart:io';
 
 // Providers
-import '../../modelos/mascota.dart';
-import '../../modelos/solicitudAdopcion.dart';
-import '../../providers/publicaciones_provider.dart';
-import '../../providers/solicitudes_provider.dart';
+import '../../../modelos/mascota.dart';
+import '../../../modelos/solicitudAdopcion.dart';
+import '../../../providers/publicaciones_provider.dart';
+import '../../../providers/solicitudes_provider.dart';
 
 // Pantallas
 import 'pantalla_editar_publicacion.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/usuario_provider.dart';
+import '../../../providers/usuario_provider.dart';
 
 class PantallaMenuUsuario extends StatelessWidget {
   const PantallaMenuUsuario({super.key});

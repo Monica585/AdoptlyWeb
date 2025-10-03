@@ -1,7 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/solicitudes_provider.dart';
-import '../../modelos/solicitudAdopcion.dart';
+import '../../../providers/solicitudes_provider.dart';
 
 class PantallaMisSolicitudes extends StatelessWidget {
   const PantallaMisSolicitudes({super.key});

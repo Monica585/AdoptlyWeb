@@ -1,9 +1,8 @@
 ﻿import 'package:flutter/material.dart';
-import 'pantalla_catalogo_mascotas.dart';           // 🏠 Todas las mascotas
-import 'pantalla_mascotas_disponibles.dart';       // 🐾 Solo disponibles
-import 'pantalla_favoritos.dart';                  // ❤️ Favoritos sin AppBar
-import 'pantalla_perfil.dart';                     // 👤 Perfil
-import 'pantalla_publicar_mascota.dart';           // 📤 Publicar mascota
+import 'pantalla_catalogo_mascotas.dart';           //  Todas las mascotas
+import 'pantalla_mascotas_disponibles.dart';       //  Solo disponibles
+import '../favoritos/pantalla_favoritos.dart';                  //  Favoritos sin AppBar
+import '../perfil/pantalla_perfil.dart';                     //  Perfil
 import 'pantalla_menu_usuario.dart';               // ☰ Drawer lateral
 
 class PantallaInicio extends StatefulWidget {

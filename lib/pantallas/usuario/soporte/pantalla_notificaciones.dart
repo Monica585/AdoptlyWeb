@@ -1,9 +1,8 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/solicitudes_provider.dart';
-import '../../providers/publicaciones_provider.dart';
-import '../../modelos/solicitudAdopcion.dart';
-import '../../modelos/mascota.dart';
+import '../../../providers/solicitudes_provider.dart';
+import '../../../providers/publicaciones_provider.dart';
+import '../../../modelos/solicitudAdopcion.dart';
 
 class PantallaNotificaciones extends StatelessWidget {
   const PantallaNotificaciones({super.key});
