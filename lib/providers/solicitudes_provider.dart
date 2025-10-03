@@ -41,4 +41,35 @@ class SolicitudesProvider with ChangeNotifier {
   List<SolicitudAdopcion> solicitudesPorMascota(String mascotaId) {
     return _solicitudes.where((s) => s.mascota.id == mascotaId).toList();
   }
+
+  void aprobarSolicitud(String mascotaId) {
+    final index = _solicitudes.indexWhere((s) => s.mascota.id == mascotaId && s.estado == EstadoSolicitud.pendiente);
+    if (index != -1) {
+      _solicitudes[index] = SolicitudAdopcion(
+        id: _solicitudes[index].id,
+        mascota: _solicitudes[index].mascota,
+        estado: EstadoSolicitud.aprobada,
+        fecha: _solicitudes[index].fecha,
+      );
+      notifyListeners();
+    }
+  }
+
+  void rechazarSolicitud(String mascotaId) {
+    final index = _solicitudes.indexWhere((s) => s.mascota.id == mascotaId && s.estado == EstadoSolicitud.pendiente);
+    if (index != -1) {
+      _solicitudes[index] = SolicitudAdopcion(
+        id: _solicitudes[index].id,
+        mascota: _solicitudes[index].mascota,
+        estado: EstadoSolicitud.rechazada,
+        fecha: _solicitudes[index].fecha,
+      );
+      notifyListeners();
+    }
+  }
+
+  void agregarSolicitud(SolicitudAdopcion solicitud) {
+    _solicitudes.add(solicitud);
+    notifyListeners();
+  }
 }

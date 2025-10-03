@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/usuario_provider.dart';
 
 class PantallaMenuUsuario extends StatelessWidget {
   const PantallaMenuUsuario({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final usuario = context.watch<UsuarioProvider>().usuario;
     return Drawer(
       child: ListView(
         padding: const EdgeInsets.all(20),
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(color: Color.fromARGB(255, 76, 172, 175)),
-            child: Text('Sofía', style: TextStyle(fontSize: 24, color: Colors.white)),
+          DrawerHeader(
+            decoration: const BoxDecoration(color: Color.fromARGB(255, 76, 172, 175)),
+            child: Text(usuario?.nombre ?? 'Usuario', style: const TextStyle(fontSize: 24, color: Colors.white)),
           ),
           _itemMenu(context, 'Inicio', Icons.home, '/home'),
           _itemMenu(context, 'Dar en adopción', Icons.add, '/publicarMascota'),
           _itemMenu(context, 'Mis publicaciones', Icons.article, '/misPublicaciones'),
+          _itemMenu(context, 'Mis solicitudes', Icons.assignment, '/misSolicitudes'),
           _itemMenu(context, 'Favoritos', Icons.favorite, '/favoritos'),
           _itemMenu(context, 'Perfil', Icons.person, '/perfil'),
           _itemMenu(context, 'Centro de ayuda', Icons.help_outline, '/ayuda'),

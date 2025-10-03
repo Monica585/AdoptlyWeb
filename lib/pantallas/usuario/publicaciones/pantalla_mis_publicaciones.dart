@@ -94,6 +94,9 @@ class PantallaMisPublicaciones extends StatelessWidget {
                           case 'inProcess':
                             _marcarEnProceso(context, mascota);
                             break;
+                          case 'delete':
+                            _eliminarPublicacion(context, mascota);
+                            break;
                         }
                       },
                       itemBuilder: (context) => [
@@ -108,6 +111,10 @@ class PantallaMisPublicaciones extends StatelessWidget {
                         const PopupMenuItem(
                           value: 'inProcess',
                           child: Text('Marcar en proceso de adopción'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'delete',
+                          child: Text('Eliminar publicación'),
                         ),
                       ],
                     ),
@@ -181,5 +188,32 @@ class PantallaMisPublicaciones extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('${mascota.nombre} marcado en proceso de adopción')),
     );
+  }
+
+  void _eliminarPublicacion(BuildContext context, Mascota mascota) async {
+    final confirmar = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmar eliminación'),
+        content: Text('¿Estás seguro de eliminar la publicación de ${mascota.nombre}?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Eliminar', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmar == true) {
+      Provider.of<PublicacionesProvider>(context, listen: false).eliminarPublicacion(mascota.id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Publicación de ${mascota.nombre} eliminada')),
+      );
+    }
   }
 }

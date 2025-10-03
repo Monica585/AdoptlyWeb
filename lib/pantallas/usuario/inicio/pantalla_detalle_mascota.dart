@@ -1,7 +1,9 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../modelos/mascota.dart';
+import '../../modelos/solicitudAdopcion.dart';
 import '../../providers/favoritos_provider.dart';
+import '../../providers/solicitudes_provider.dart';
 import 'pantalla_informacion_contacto.dart'; // importar la pantalla de contacto
 
 class PantallaDetalleMascota extends StatelessWidget {
@@ -86,6 +88,17 @@ class PantallaDetalleMascota extends StatelessWidget {
                   child: ElevatedButton.icon(
                     onPressed: mascota.estado == 'Disponible'
                         ? () {
+                            final solicitudesProvider = Provider.of<SolicitudesProvider>(context, listen: false);
+                            final solicitud = SolicitudAdopcion(
+                              id: 's${DateTime.now().millisecondsSinceEpoch}',
+                              mascota: mascota,
+                              estado: EstadoSolicitud.pendiente,
+                              fecha: DateTime.now(),
+                            );
+                            solicitudesProvider.agregarSolicitud(solicitud);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Solicitud enviada para ${mascota.nombre}')),
+                            );
                             Navigator.pushNamed(context, '/misSolicitudes');
                           }
                         : null,

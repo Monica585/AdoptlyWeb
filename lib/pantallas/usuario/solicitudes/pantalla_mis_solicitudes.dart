@@ -10,40 +10,28 @@ class PantallaMisSolicitudes extends StatelessWidget {
   Widget build(BuildContext context) {
     final solicitudes = Provider.of<SolicitudesProvider>(context).solicitudes;
 
-    final pendientes = solicitudes
-        .where((s) => s.estado == EstadoSolicitud.pendiente)
-        .length;
-
-    final aprobadas = solicitudes
-        .where((s) => s.estado == EstadoSolicitud.aprobada)
-        .length;
-
-    final rechazadas = solicitudes
-        .where((s) => s.estado == EstadoSolicitud.rechazada)
-        .length;
-
     return Scaffold(
-      appBar: AppBar(title: const Text("Solicitudes de Adopción")),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+          },
+        ),
+        title: const Text("Mis solicitudes"),
+        backgroundColor: const Color.fromARGB(255, 76, 172, 175),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("📌 Resumen:", style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 10),
-            Text("Pendientes: $pendientes"),
-            Text("Aprobadas: $aprobadas"),
-            Text("Rechazadas: $rechazadas"),
-            const SizedBox(height: 30),
-            Text("📋 Lista de Solicitudes:",
-                style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
+        child: solicitudes.isEmpty
+            ? const Center(child: Text("Aún no has solicitado ninguna adopción"))
+            : ListView.builder(
                 itemCount: solicitudes.length,
                 itemBuilder: (ctx, i) {
                   final solicitud = solicitudes[i];
                   return Card(
+                    elevation: 3,
+                    margin: const EdgeInsets.symmetric(vertical: 8),
                     child: ListTile(
                       leading: Image.asset(
                         solicitud.mascota.imagen,
@@ -60,9 +48,6 @@ class PantallaMisSolicitudes extends StatelessWidget {
                   );
                 },
               ),
-            ),
-          ],
-        ),
       ),
     );
   }

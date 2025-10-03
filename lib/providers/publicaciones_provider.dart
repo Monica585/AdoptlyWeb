@@ -154,4 +154,11 @@ class PublicacionesProvider with ChangeNotifier {
 
   // Getter para publicaciones aprobadas
   List<Mascota> get publicacionesAprobadas => _publicaciones.where((m) => m.estadoAprobacion == 'aprobada').toList();
+
+  // Método para eliminar una publicación
+  void eliminarPublicacion(String id) {
+    _publicaciones.removeWhere((m) => m.id == id);
+    _savePublicaciones();
+    notifyListeners();
+  }
 }
