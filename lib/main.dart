@@ -17,18 +17,18 @@ import 'pantallas/autenticacion/pantalla_registro.dart';
 import 'pantallas/autenticacion/pantalla_recuperar_contrasena.dart';
 
 // Usuario
-import 'pantallas/usuario/pantalla_cambiar_contrasena.dart';
-import 'pantallas/usuario/pantalla_catalogo_mascotas.dart';
-import 'pantallas/usuario/pantalla_editar_perfil.dart';
-import 'pantallas/usuario/pantalla_favoritos.dart';
-import 'pantallas/usuario/pantalla_informacion_contacto.dart';
-import 'pantallas/usuario/pantalla_inicio.dart';
-import 'pantallas/usuario/pantalla_menu_usuario.dart';
-import 'pantallas/usuario/pantalla_mis_publicaciones.dart';
-import 'pantallas/usuario/pantalla_mis_solicitudes.dart';
-import 'pantallas/usuario/pantalla_notificaciones.dart';
-import 'pantallas/usuario/pantalla_perfil.dart';
-import 'pantallas/usuario/pantalla_publicar_mascota.dart';
+import 'pantallas/usuario/perfil/pantalla_cambiar_contrasena.dart';
+import 'pantallas/usuario/inicio/pantalla_catalogo_mascotas.dart';
+import 'pantallas/usuario/perfil/pantalla_editar_perfil.dart';
+import 'pantallas/usuario/favoritos/pantalla_favoritos.dart';
+import 'pantallas/usuario/inicio/pantalla_informacion_contacto.dart';
+import 'pantallas/usuario/inicio/pantalla_inicio.dart';
+import 'pantallas/usuario/inicio/pantalla_menu_usuario.dart';
+import 'pantallas/usuario/publicaciones/pantalla_mis_publicaciones.dart';
+import 'pantallas/usuario/solicitudes/pantalla_mis_solicitudes.dart';
+import 'pantallas/usuario/soporte/pantalla_notificaciones.dart';
+import 'pantallas/usuario/perfil/pantalla_perfil.dart';
+import 'pantallas/usuario/publicaciones/pantalla_publicar_mascota.dart';
 
 // Administrador
 import 'pantallas/administrador/pantalla_estadisticas.dart';

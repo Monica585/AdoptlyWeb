@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:provider/provider.dart';
-import '../../providers/usuario_provider.dart';
+import '../../../providers/usuario_provider.dart';
 
 class PantallaPerfil extends StatefulWidget {
   const PantallaPerfil({super.key});

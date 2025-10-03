@@ -1,9 +1,9 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../modelos/mascota.dart';
-import '../../modelos/solicitudAdopcion.dart';
-import '../../providers/favoritos_provider.dart';
-import '../../providers/solicitudes_provider.dart';
+import '../../../modelos/mascota.dart';
+import '../../../modelos/solicitudAdopcion.dart';
+import '../../../providers/favoritos_provider.dart';
+import '../../../providers/solicitudes_provider.dart';
 import 'pantalla_informacion_contacto.dart'; // importar la pantalla de contacto
 
 class PantallaDetalleMascota extends StatelessWidget {

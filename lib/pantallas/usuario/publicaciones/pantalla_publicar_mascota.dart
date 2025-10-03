@@ -4,8 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'dart:typed_data';
 import 'dart:io';
-import '../../modelos/mascota.dart';
-import '../../providers/publicaciones_provider.dart';
+import '../../../modelos/mascota.dart';
+import '../../../providers/publicaciones_provider.dart';
 import 'pantalla_confirmar_publicacion.dart';
 import 'pantalla_publicacion_pendiente.dart';
 

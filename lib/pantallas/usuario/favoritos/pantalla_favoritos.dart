@@ -1,6 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../providers/favoritos_provider.dart';
+import '../../../providers/favoritos_provider.dart';
 
 class PantallaFavoritos extends StatelessWidget {
   const PantallaFavoritos({super.key});

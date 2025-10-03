@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../../modelos/mascota.dart';
-import '../../providers/publicaciones_provider.dart';
+import '../../../modelos/mascota.dart';
+import '../../../providers/publicaciones_provider.dart';
 
 class PantallaEditarPublicacion extends StatefulWidget {
   final Mascota mascota;
