@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'dart:typed_data';
 import 'dart:io';
 import '../../../modelos/mascota.dart';
+import '../../../modelos/usuario.dart';
 import '../../../providers/publicaciones_provider.dart';
+import '../../../providers/usuario_provider.dart';
 import 'pantalla_confirmar_publicacion.dart';
 import 'pantalla_publicacion_pendiente.dart';
 
@@ -30,8 +32,13 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
   final correoController = TextEditingController();
   final ubicacionController = TextEditingController();
 
-  final emailRegExp = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
-  final edadRegExp = RegExp(r'\d');
+  // Expresión regular mejorada para correos válidos
+  final emailRegExp = RegExp(
+    r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$"
+  );
+
+  // 🔹 Eliminado el validador de solo números, ya no usamos esto:
+  // final edadRegExp = RegExp(r'^\d+$');
 
   XFile? imagenSeleccionada;
   final ImagePicker _picker = ImagePicker();
@@ -97,6 +104,19 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
             Provider.of<PublicacionesProvider>(context, listen: false)
                 .agregarPublicacion(nuevaMascota);
 
+            // Actualizar información de contacto del usuario
+            final usuarioProvider = Provider.of<UsuarioProvider>(context, listen: false);
+            if (usuarioProvider.usuario != null) {
+              usuarioProvider.usuario = Usuario(
+                nombre: usuarioProvider.usuario!.nombre,
+                correo: usuarioProvider.usuario!.correo,
+                contrasena: usuarioProvider.usuario!.contrasena,
+                fotoUrl: usuarioProvider.usuario!.fotoUrl,
+                telefono: telefonoController.text.trim(),
+                ubicacion: ubicacionController.text.trim(),
+              );
+            }
+
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -109,7 +129,8 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
     );
   }
 
-  Widget campoTexto(String label, TextEditingController controller, {int maxLines = 1, String? Function(String?)? validator}) {
+  Widget campoTexto(String label, TextEditingController controller,
+      {int maxLines = 1, String? Function(String?)? validator}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
@@ -125,9 +146,10 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         ),
-        validator: validator ?? ((value) => value == null || value.trim().isEmpty
-            ? 'Este campo es obligatorio'
-            : null),
+        validator: validator ??
+            ((value) => value == null || value.trim().isEmpty
+                ? 'Este campo es obligatorio'
+                : null),
       ),
     );
   }
@@ -220,11 +242,19 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
               campoTexto('Nombre del animal', nombreController),
               campoTipoAnimal(),
               campoTexto('Raza', razaController),
-              campoTexto('Edad', edadController, validator: (value) {
-                if (value == null || value.trim().isEmpty) return 'La edad es obligatoria';
-                if (!edadRegExp.hasMatch(value)) return 'La edad debe contener al menos un número';
-                return null;
-              }),
+
+              // 🔹 CAMPO EDAD MODIFICADO: Ahora permite texto y número, solo valida que no esté vacío
+              campoTexto(
+                'Edad',
+                edadController,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'La edad es obligatoria';
+                  }
+                  return null; // Permite número y texto
+                },
+              ),
+
               campoTexto('Descripción', descripcionController, maxLines: 3),
               const SizedBox(height: 15),
               widgetSubirFoto(),
@@ -236,7 +266,7 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
               campoTexto('Teléfono', telefonoController),
               campoTexto('Correo Electrónico', correoController, validator: (value) {
                 if (value == null || value.trim().isEmpty) return 'El correo es obligatorio';
-                if (!emailRegExp.hasMatch(value)) return 'Correo inválido';
+                if (!emailRegExp.hasMatch(value.trim())) return 'Correo inválido';
                 return null;
               }),
               campoTexto('Ubicación', ubicacionController),

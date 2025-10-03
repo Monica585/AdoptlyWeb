@@ -29,17 +29,23 @@ class PantallaDetalleMascota extends StatelessWidget {
             // Imagen de la mascota
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                mascota.imagen,
-                height: 220,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  height: 220,
-                  color: Colors.grey[300],
-                  child: const Icon(Icons.pets, size: 60),
-                ),
-              ),
+              child: mascota.imagenBytes != null
+                  ? Image.memory(
+                      mascota.imagenBytes!,
+                      height: 220,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        height: 220,
+                        color: Colors.grey[300],
+                        child: const Icon(Icons.pets, size: 60),
+                      ),
+                    )
+                  : Container(
+                      height: 220,
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.pets, size: 60),
+                    ),
             ),
             const SizedBox(height: 20),
 

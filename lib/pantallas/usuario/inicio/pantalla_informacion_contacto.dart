@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../providers/usuario_provider.dart';
 
 class PantallaInformacionContacto extends StatelessWidget {
   const PantallaInformacionContacto({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final usuarioProvider = Provider.of<UsuarioProvider>(context);
+    final usuario = usuarioProvider.usuario;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Información del contacto'),
@@ -27,7 +32,7 @@ class PantallaInformacionContacto extends StatelessWidget {
             _infoItem(
               icon: Icons.phone,
               title: 'WhatsApp',
-              value: '+57 301 433 1792',
+              value: usuario?.telefono ?? '+57 301 433 1792',
               iconColor: Colors.green,
             ),
             const Divider(),
@@ -36,7 +41,7 @@ class PantallaInformacionContacto extends StatelessWidget {
             _infoItem(
               icon: Icons.email_outlined,
               title: 'Correo electrónico',
-              value: 'monicagarzon@gmail.com',
+              value: usuario?.correo ?? 'monicagarzon@gmail.com',
               iconColor: Colors.grey,
             ),
             const Divider(),
@@ -45,7 +50,7 @@ class PantallaInformacionContacto extends StatelessWidget {
             _infoItem(
               icon: Icons.location_on,
               title: 'Ubicación',
-              value: 'Barrio Santa Barbara',
+              value: usuario?.ubicacion ?? 'Barrio Santa Barbara',
               iconColor: Colors.redAccent,
             ),
             const Divider(),
@@ -56,7 +61,7 @@ class PantallaInformacionContacto extends StatelessWidget {
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  
+
                 },
                 icon: const Icon(Icons.pets),
                 label: const Text('Contacto'),

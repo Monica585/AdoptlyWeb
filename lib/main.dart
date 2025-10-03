@@ -14,6 +14,7 @@ import 'pantallas/autenticacion/pantalla_presentacion.dart';
 import 'pantallas/autenticacion/pantalla_entrada_autenticacion.dart';
 import 'pantallas/autenticacion/pantalla_inicio_sesion.dart';
 import 'pantallas/autenticacion/pantalla_registro.dart';
+import 'pantallas/autenticacion/pantalla_registro_exitoso.dart';
 import 'pantallas/autenticacion/pantalla_recuperar_contrasena.dart';
 
 // Usuario
@@ -81,6 +82,7 @@ class AdoptlyApp extends StatelessWidget {
         '/login': (context) => const PantallaInicioSesion(),
         '/presentacion': (context) => const PantallaPresentacion(),
         '/register': (context) => const PantallaRegistro(),
+        '/registroExitoso': (context) => const PantallaRegistroExitoso(),
 
         // Usuario
         '/buscar': (context) => const PantallaCatalogoMascotas(),
