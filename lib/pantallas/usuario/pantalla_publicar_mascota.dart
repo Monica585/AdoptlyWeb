@@ -1,5 +1,11 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'dart:typed_data';
+import 'dart:io';
+import '../../modelos/mascota.dart';
+import '../../providers/publicaciones_provider.dart';
 import 'pantalla_confirmar_publicacion.dart';
 import 'pantalla_publicacion_pendiente.dart';
 
@@ -7,8 +13,7 @@ class PantallaPublicarMascota extends StatefulWidget {
   const PantallaPublicarMascota({super.key});
 
   @override
-  State<PantallaPublicarMascota> createState() =>
-      _PantallaPublicarMascotaState();
+  State<PantallaPublicarMascota> createState() => _PantallaPublicarMascotaState();
 }
 
 class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
@@ -18,7 +23,7 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
   final razaController = TextEditingController();
   final edadController = TextEditingController();
   final descripcionController = TextEditingController();
-  String tipoSeleccionado = 'Perro'; //  Campo tipo
+  String tipoSeleccionado = 'Perro';
 
   final nombreContactoController = TextEditingController();
   final telefonoController = TextEditingController();
@@ -60,12 +65,35 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
       MaterialPageRoute(
         builder: (_) => PantallaConfirmarPublicacion(
           nombre: nombreController.text,
-          tipo: tipoSeleccionado, //  Se pasa el tipo seleccionado
+          tipo: tipoSeleccionado,
           raza: razaController.text,
           edad: edadController.text,
           descripcion: descripcionController.text,
           imagen: imagenSeleccionada!,
-          onConfirmar: () {
+          onConfirmar: () async {
+            Uint8List? bytes;
+            if (kIsWeb) {
+              bytes = await imagenSeleccionada!.readAsBytes();
+            } else {
+              bytes = await File(imagenSeleccionada!.path).readAsBytes();
+            }
+
+            final nuevaMascota = Mascota(
+              id: DateTime.now().millisecondsSinceEpoch.toString(),
+              nombre: nombreController.text,
+              tipo: tipoSeleccionado,
+              raza: razaController.text,
+              edad: edadController.text,
+              imagen: imagenSeleccionada!.path,
+              imagenBytes: bytes,
+              descripcion: descripcionController.text,
+              estado: 'Disponible',
+              estadoAprobacion: 'pendiente',
+            );
+
+            Provider.of<PublicacionesProvider>(context, listen: false)
+                .agregarPublicacion(nuevaMascota);
+
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -116,11 +144,17 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
             imagenSeleccionada != null
                 ? ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      imagenSeleccionada!.path,
-                      height: 150,
-                      fit: BoxFit.cover,
-                    ),
+                    child: kIsWeb
+                        ? Image.network(
+                            imagenSeleccionada!.path,
+                            height: 150,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.file(
+                            File(imagenSeleccionada!.path),
+                            height: 150,
+                            fit: BoxFit.cover,
+                          ),
                   )
                 : const Column(
                     children: [
@@ -181,7 +215,7 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               campoTexto('Nombre del animal', nombreController),
-              campoTipoAnimal(), // ✅ Campo tipo integrado
+              campoTipoAnimal(),
               campoTexto('Raza', razaController),
               campoTexto('Edad', edadController),
               campoTexto('Descripción', descripcionController, maxLines: 3),

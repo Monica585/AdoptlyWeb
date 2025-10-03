@@ -1,26 +1,99 @@
 ﻿import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:provider/provider.dart';
+import '../../providers/usuario_provider.dart';
 
-class PantallaPerfil extends StatelessWidget {
+class PantallaPerfil extends StatefulWidget {
   const PantallaPerfil({super.key});
 
   @override
+  State<PantallaPerfil> createState() => _PantallaPerfilState();
+}
+
+class _PantallaPerfilState extends State<PantallaPerfil> {
+  XFile? imagenSeleccionada;
+
+  Future<void> seleccionarImagen() async {
+    final ImagePicker picker = ImagePicker();
+
+    try {
+      final XFile? imagen = await picker.pickImage(source: ImageSource.gallery);
+      if (imagen != null) {
+        setState(() {
+          imagenSeleccionada = imagen;
+        });
+
+        // Aquí podrías subir la imagen a Firebase Storage y guardar la URL
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error al seleccionar la imagen')),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final usuario = Provider.of<UsuarioProvider>(context).usuario;
+    ImageProvider avatar;
+
+    if (imagenSeleccionada != null) {
+      avatar = kIsWeb
+          ? NetworkImage(imagenSeleccionada!.path)
+          : FileImage(File(imagenSeleccionada!.path)) as ImageProvider;
+    } else if (usuario.fotoUrl != null) {
+      avatar = NetworkImage(usuario.fotoUrl!);
+    } else {
+      avatar = const AssetImage('assets/images/sofia.png');
+    }
+
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+          },
+        ),
         title: const Text('Perfil'),
         backgroundColor: const Color.fromARGB(255, 76, 172, 175),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CircleAvatar(
-              radius: 50,
-              backgroundImage: AssetImage('assets/images/sofia.png'),
+            GestureDetector(
+              onTap: seleccionarImagen,
+              child: Center(
+                child: Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: avatar,
+                    ),
+                    Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(Icons.edit, size: 18, color: Colors.black),
+                    ),
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 10),
-            const Text('Sofía', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const Text('sofia.perez@gmail.com', style: TextStyle(color: Colors.grey)),
+            Center(
+              child: Text(usuario.nombre, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            ),
+            Center(
+              child: Text(usuario.correo, style: const TextStyle(color: Colors.grey)),
+            ),
             const SizedBox(height: 30),
             const Text('Configuración de la cuenta', style: TextStyle(fontSize: 16)),
             const SizedBox(height: 10),
@@ -37,34 +110,44 @@ class PantallaPerfil extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.notifications),
               title: const Text('Notificaciones'),
-              onTap: () {}, // Puedes agregar lógica luego
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text('Notificaciones'),
+                    content: const Text('Aquí puedes configurar tus preferencias.'),
+                    actions: [
+                      TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cerrar')),
+                    ],
+                  ),
+                );
+              },
             ),
             ListTile(
               leading: const Icon(Icons.delete),
               title: const Text('Eliminar cuenta'),
-              onTap: () {}, // Confirmación y lógica
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text('¿Eliminar cuenta?'),
+                    content: const Text('Esta acción no se puede deshacer. ¿Estás segura?'),
+                    actions: [
+                      TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancelar')),
+                      TextButton(
+                        onPressed: () {
+                          // Aquí iría la lógica para eliminar la cuenta
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Eliminar', style: TextStyle(color: Colors.red)),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 3,
-        selectedItemColor: const Color.fromARGB(255, 76, 172, 175),
-        unselectedItemColor: Colors.grey,
-        onTap: (index) {
-          switch (index) {
-            case 0: Navigator.pushNamed(context, '/home'); break;
-            case 1: Navigator.pushNamed(context, '/buscar'); break;
-            case 2: Navigator.pushNamed(context, '/favoritos'); break;
-            case 3: break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscar'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoritos'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
-        ],
       ),
     );
   }

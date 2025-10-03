@@ -1,4 +1,7 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/usuarios_provider.dart';
+import '../../providers/usuario_provider.dart';
 
 class PantallaRegistro extends StatelessWidget {
   const PantallaRegistro({super.key});
@@ -26,9 +29,22 @@ class PantallaRegistro extends StatelessWidget {
         return;
       }
 
-      // Simulación de éxito
-      mostrarMensaje(context, 'Registro exitoso. ¡Bienvenida, $nombre!');
-      Navigator.pushReplacementNamed(context, '/home');
+      final usuariosProvider = Provider.of<UsuariosProvider>(context, listen: false);
+      final usuarioProvider = Provider.of<UsuarioProvider>(context, listen: false);
+
+      // Registrar usuario
+      final exito = usuariosProvider.registrarUsuario(nombre, correo, contrasena);
+      if (exito) {
+        // Establecer usuario actual
+        final nuevoUsuario = usuariosProvider.validarLogin(correo, contrasena);
+        if (nuevoUsuario != null) {
+          usuarioProvider.usuario = nuevoUsuario;
+        }
+        mostrarMensaje(context, 'Registro exitoso. ¡Bienvenido, $nombre!');
+        Navigator.pushReplacementNamed(context, '/login');
+      } else {
+        mostrarMensaje(context, 'El correo ya está registrado.');
+      }
     }
 
     return Scaffold(

@@ -11,6 +11,12 @@ class PantallaFavoritos extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+          },
+        ),
         title: const Text('Favoritos'),
         backgroundColor: const Color.fromARGB(255, 76, 172, 175),
       ),

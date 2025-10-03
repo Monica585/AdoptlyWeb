@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'providers/favoritos_provider.dart';
 import 'providers/publicaciones_provider.dart';
 import 'providers/solicitudes_provider.dart';
+import 'providers/usuario_provider.dart';
+import 'providers/usuarios_provider.dart';
 
 // Autenticación
 import 'pantallas/autenticacion/pantalla_bienvenida.dart';
@@ -15,26 +17,28 @@ import 'pantallas/autenticacion/pantalla_registro.dart';
 import 'pantallas/autenticacion/pantalla_recuperar_contrasena.dart';
 
 // Usuario
-import 'pantallas/usuario/pantalla_inicio.dart';
+import 'pantallas/usuario/pantalla_cambiar_contrasena.dart';
+import 'pantallas/usuario/pantalla_catalogo_mascotas.dart';
+import 'pantallas/usuario/pantalla_editar_perfil.dart';
 import 'pantallas/usuario/pantalla_favoritos.dart';
-import 'pantallas/usuario/pantalla_perfil.dart';
-import 'pantallas/usuario/pantalla_editar_perfil.dart';           // ✅ NUEVO
-import 'pantallas/usuario/pantalla_cambiar_contrasena.dart';      // ✅ NUEVO
+import 'pantallas/usuario/pantalla_informacion_contacto.dart';
+import 'pantallas/usuario/pantalla_inicio.dart';
+import 'pantallas/usuario/pantalla_menu_usuario.dart';
+import 'pantallas/usuario/pantalla_mis_publicaciones.dart';
 import 'pantallas/usuario/pantalla_mis_solicitudes.dart';
 import 'pantallas/usuario/pantalla_notificaciones.dart';
+import 'pantallas/usuario/pantalla_perfil.dart';
 import 'pantallas/usuario/pantalla_publicar_mascota.dart';
-import 'pantallas/usuario/pantalla_mis_publicaciones.dart';
-import 'pantallas/usuario/pantalla_menu_usuario.dart';
-import 'pantallas/usuario/pantalla_informacion_contacto.dart';
-import 'pantallas/usuario/pantalla_catalogo_mascotas.dart';
 
 // Administrador
-import 'pantallas/administrador/pantalla_panel_admin.dart';
-import 'pantallas/administrador/pantalla_solicitudes_admin.dart';
 import 'pantallas/administrador/pantalla_estadisticas.dart';
+import 'pantallas/administrador/pantalla_panel_admin.dart';
 import 'pantallas/administrador/pantalla_publicaciones_pendientes.dart';
 import 'pantallas/administrador/pantalla_registro_admin.dart';
-import 'pantallas/administrador/pantalla_configuracion_admin.dart';
+import 'pantallas/administrador/pantalla_solicitudes_admin.dart';
+
+// 🔧 Clave global para navegación
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
   runApp(
@@ -43,6 +47,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => FavoritosProvider()),
         ChangeNotifierProvider(create: (_) => PublicacionesProvider()),
         ChangeNotifierProvider(create: (_) => SolicitudesProvider()),
+        ChangeNotifierProvider(create: (_) => UsuarioProvider()),
+        ChangeNotifierProvider(create: (_) => UsuariosProvider()),
       ],
       child: const AdoptlyApp(),
     ),
@@ -65,43 +71,37 @@ class AdoptlyApp extends StatelessWidget {
         useMaterial3: true,
         scaffoldBackgroundColor: Colors.white,
       ),
+      navigatorKey: navigatorKey,
       initialRoute: '/',
       routes: {
         // Autenticación
         '/': (context) => const PantallaBienvenida(),
-        '/presentacion': (context) => const PantallaPresentacion(),
         '/auth': (context) => const PantallaEntradaAutenticacion(),
-        '/login': (context) => const PantallaInicioSesion(),
-        '/register': (context) => const PantallaRegistro(),
         '/forgotPassword': (context) => const PantallaRecuperarContrasena(),
+        '/login': (context) => const PantallaInicioSesion(),
+        '/presentacion': (context) => const PantallaPresentacion(),
+        '/register': (context) => const PantallaRegistro(),
 
         // Usuario
+        '/buscar': (context) => const PantallaCatalogoMascotas(),
+        '/cambiarContrasena': (context) => const PantallaCambiarContrasena(),
+        '/editarPerfil': (context) => const PantallaEditarPerfil(),
+        '/favoritos': (context) => const PantallaFavoritos(),
         '/home': (context) => const PantallaInicio(),
-        '/publicarMascota': (context) => const PantallaPublicarMascota(),
+        '/infoContacto': (context) => const PantallaInformacionContacto(),
+        '/menu': (context) => const PantallaMenuUsuario(),
+        '/misPublicaciones': (context) => const PantallaMisPublicaciones(),
         '/misSolicitudes': (context) => const PantallaMisSolicitudes(),
         '/notificaciones': (context) => const PantallaNotificaciones(),
-        '/misPublicaciones': (context) => const PantallaMisPublicaciones(),
-        '/menu': (context) => const PantallaMenuUsuario(),
-        '/infoContacto': (context) => const PantallaInformacionContacto(),
-        '/favoritos': (context) => const PantallaFavoritos(),
-        '/buscar': (context) => const PantallaCatalogoMascotas(),
         '/perfil': (context) => const PantallaPerfil(),
-        '/editarPerfil': (context) => const PantallaEditarPerfil(),               // ✅ NUEVO
-        '/cambiarContrasena': (context) => const PantallaCambiarContrasena(),     // ✅ NUEVO
+        '/publicarMascota': (context) => const PantallaPublicarMascota(),
 
         // Administrador
-        '/adminPanel': (context) => const PantallaPanelAdmin(),
-        '/adminSolicitudes': (context) => const PantallaSolicitudesAdmin(),
         '/adminEstadisticas': (context) => const PantallaEstadisticas(),
+        '/adminPanel': (context) => const PantallaPanelAdmin(),
         '/adminPendientes': (context) => const PantallaPublicacionesPendientes(),
         '/adminRegistro': (context) => const PantallaRegistroAdmin(),
-        '/adminConfiguracion': (context) => const PantallaConfiguracionAdmin(),
-
-        // Ayuda
-        '/ayuda': (context) => Scaffold(
-              appBar: AppBar(title: const Text('Centro de ayuda')),
-              body: const Center(child: Text('Aquí irá el contenido de ayuda')),
-            ),
+        '/adminSolicitudes': (context) => const PantallaSolicitudesAdmin(),
       },
     );
   }

@@ -1,4 +1,7 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/usuarios_provider.dart';
+import '../../providers/usuario_provider.dart';
 
 class PantallaInicioSesion extends StatefulWidget {
   const PantallaInicioSesion({super.key});
@@ -27,8 +30,24 @@ class _PantallaInicioSesionState extends State<PantallaInicioSesion> {
       return;
     }
 
-    // Simulación de éxito de inicio de sesión
-    Navigator.pushReplacementNamed(context, '/home');
+    final usuariosProvider = Provider.of<UsuariosProvider>(context, listen: false);
+    final usuarioProvider = Provider.of<UsuarioProvider>(context, listen: false);
+
+    // Verificar credenciales de administrador
+    if (usuariosProvider.esAdmin(correo, contrasena)) {
+      Navigator.pushReplacementNamed(context, '/adminPanel');
+      return;
+    }
+
+    // Validar usuario registrado
+    final usuario = usuariosProvider.validarLogin(correo, contrasena);
+    if (usuario != null) {
+      // Establecer usuario actual
+      usuarioProvider.usuario = usuario;
+      Navigator.pushReplacementNamed(context, '/home');
+    } else {
+      mostrarMensaje('Correo o contraseña incorrectos.');
+    }
   }
 
   void mostrarMensaje(String mensaje) {

@@ -6,9 +6,53 @@ class PantallaPanelAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Panel Admin")),
-      body: const Center(
-        child: Text("Pantalla Panel Admin"),
+      appBar: AppBar(
+        title: const Text('Panel de administración'),
+        backgroundColor: const Color.fromARGB(255, 76, 172, 175),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          const Text(
+            'Bienvenida, administradora 👩‍💼',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+
+          ListTile(
+            leading: const Icon(Icons.assignment),
+            title: const Text('Solicitudes de adopción'),
+            onTap: () => Navigator.pushNamed(context, '/adminSolicitudes'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.pets),
+            title: const Text('Publicaciones pendientes'),
+            onTap: () => Navigator.pushNamed(context, '/adminPendientes'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.bar_chart),
+            title: const Text('Estadísticas'),
+            onTap: () => Navigator.pushNamed(context, '/adminEstadisticas'),
+          ),
+          ListTile(
+            leading: const Icon(Icons.person_add),
+            title: const Text('Registrar administrador'),
+            onTap: () => Navigator.pushNamed(context, '/adminRegistro'),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton.icon(
+            onPressed: () {
+              Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+            },
+            icon: const Icon(Icons.logout),
+            label: const Text('Cerrar sesión'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(double.infinity, 50),
+            ),
+          ),
+        ],
       ),
     );
   }

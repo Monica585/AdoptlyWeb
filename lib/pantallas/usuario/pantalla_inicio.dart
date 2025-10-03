@@ -17,28 +17,22 @@ class _PantallaInicioState extends State<PantallaInicio> {
   int indiceActual = 0;
 
   final List<Widget> pantallas = const [
-    PantallaCatalogoMascotas(),         // 🏠 Todas las mascotas
-    PantallaMascotasDisponibles(),      // 🐾 Solo disponibles
-    PantallaFavoritos(),                // ❤️ Favoritos sin AppBar
-    PantallaPerfil(),                   // 👤 Perfil
+    PantallaCatalogoMascotas(),         // Todas las mascotas
+    PantallaMascotasDisponibles(),      //  Solo disponibles
+    PantallaFavoritos(),                // Favoritos sin AppBar
+    PantallaPerfil(),                   //  Perfil
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const PantallaMenuUsuario(), // ☰ Drawer lateral
+      drawer: const PantallaMenuUsuario(),
 
-      //  Mostrar AppBar solo si no estás en Favoritos
-      appBar: indiceActual != 2
+      appBar: (indiceActual == 0 || indiceActual == 1)
           ? AppBar(
-              automaticallyImplyLeading: false,
-              leading: Builder(
-                builder: (context) => IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                ),
+              title: Text(
+                indiceActual == 0 ? 'Adopta' : 'Mascotas disponibles',
               ),
-              title: const Text('Adopta'),
               backgroundColor: const Color.fromARGB(255, 76, 172, 175),
               actions: [
                 TextButton(

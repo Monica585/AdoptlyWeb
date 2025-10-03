@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
+import 'dart:io';
 import '../../modelos/mascota.dart';
+import '../../providers/publicaciones_provider.dart';
 import 'pantalla_detalle_mascota.dart';
 import 'pantalla_menu_usuario.dart';
 
@@ -13,67 +17,23 @@ class PantallaMascotasDisponibles extends StatefulWidget {
 
 class _PantallaMascotasDisponiblesState
     extends State<PantallaMascotasDisponibles> {
-  final List<Mascota> todasLasMascotas = [
-    Mascota(
-        id: '1',
-        nombre: 'Max',
-        tipo: 'Perro',
-        raza: 'Golden Retriever',
-        edad: '4 años',
-        imagen: 'assets/images/max.png',
-        descripcion: 'Max es un perro cariñoso y juguetón.',
-        estado: 'Disponible'),
-    Mascota(
-        id: '2',
-        nombre: 'Luna',
-        tipo: 'Perro',
-        raza: 'Samoyedo',
-        edad: '3 años',
-        imagen: 'assets/images/luna.png',
-        descripcion: 'Luna es dulce y tranquila.',
-        estado: 'En proceso de adopción'),
-    Mascota(
-        id: '3',
-        nombre: 'Rocky',
-        tipo: 'Perro',
-        raza: 'Labrador',
-        edad: '5 años',
-        imagen: 'assets/images/rocky.png',
-        descripcion: 'Rocky es muy activo.',
-        estado: 'Adoptado'),
-    Mascota(
-        id: '4',
-        nombre: 'Milo',
-        tipo: 'Gato',
-        raza: 'Gato doméstico',
-        edad: '2 años',
-        imagen: 'assets/images/milo.png',
-        descripcion: 'Milo es curioso y sociable.',
-        estado: 'En proceso'),
-    Mascota(
-        id: '5',
-        nombre: 'Nube',
-        tipo: 'Otro',
-        raza: 'Conejo',
-        edad: '1 año',
-        imagen: 'assets/images/nube.png',
-        descripcion: 'Nube es suave y silencioso.',
-        estado: 'Disponible'),
-  ];
-
   String textoBusqueda = '';
 
-  List<Mascota> get mascotasDisponibles {
-    return todasLasMascotas.where((m) {
+  List<Mascota> getMascotasDisponibles(List<Mascota> publicaciones) {
+    return publicaciones.where((m) {
       final esDisponible = m.estado.toLowerCase() == 'disponible';
+      final esAprobada = m.estadoAprobacion == 'aprobada';
       final coincideBusqueda = m.nombre.toLowerCase().contains(textoBusqueda.toLowerCase()) ||
           m.raza.toLowerCase().contains(textoBusqueda.toLowerCase());
-      return esDisponible && coincideBusqueda;
+      return esDisponible && esAprobada && coincideBusqueda;
     }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
+    final publicacionesProvider = Provider.of<PublicacionesProvider>(context);
+    final mascotasDisponibles = getMascotasDisponibles(publicacionesProvider.publicacionesAprobadas);
+
     return Scaffold(
       drawer: const PantallaMenuUsuario(),
       body: Padding(
@@ -102,13 +62,23 @@ class _PantallaMascotasDisponiblesState
                           elevation: 4,
                           margin: const EdgeInsets.symmetric(vertical: 10),
                           child: ListTile(
-                            leading: Image.asset(
-                              mascota.imagen,
-                              width: 60,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.pets),
-                            ),
+                            leading: mascota.imagenBytes != null
+                                ? Image.memory(
+                                    mascota.imagenBytes!,
+                                    width: 60,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) =>
+                                        const Icon(Icons.pets),
+                                  )
+                                : mascota.imagen.startsWith('assets')
+                                    ? Image.asset(
+                                        mascota.imagen,
+                                        width: 60,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error, stackTrace) =>
+                                            const Icon(Icons.pets),
+                                      )
+                                    : const Icon(Icons.pets),
                             title: Text(mascota.nombre),
                             subtitle: Text('${mascota.raza} • ${mascota.estado}'),
                             trailing: TextButton(

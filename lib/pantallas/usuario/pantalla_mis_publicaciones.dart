@@ -1,5 +1,7 @@
 ﻿import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
 
 // Providers
 import '../../modelos/mascota.dart';
@@ -47,13 +49,23 @@ class PantallaMisPublicaciones extends StatelessWidget {
                   elevation: 3,
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   child: ListTile(
-                    leading: Image.asset(
-                      mascota.imagen,
-                      width: 60,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.pets),
-                    ),
+                    leading: mascota.imagenBytes != null
+                        ? Image.memory(
+                            mascota.imagenBytes!,
+                            width: 60,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) =>
+                                const Icon(Icons.pets),
+                          )
+                        : mascota.imagen.startsWith('assets')
+                            ? Image.asset(
+                                mascota.imagen,
+                                width: 60,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Icon(Icons.pets),
+                              )
+                            : const Icon(Icons.pets),
                     title: Text(mascota.nombre),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,16 +77,39 @@ class PantallaMisPublicaciones extends StatelessWidget {
                         ),
                       ],
                     ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.blue),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => PantallaEditarPublicacion(mascota: mascota),
-                          ),
-                        );
+                    trailing: PopupMenuButton<String>(
+                      onSelected: (value) {
+                        switch (value) {
+                          case 'edit':
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => PantallaEditarPublicacion(mascota: mascota),
+                              ),
+                            );
+                            break;
+                          case 'adopted':
+                            _marcarComoAdoptado(context, mascota);
+                            break;
+                          case 'inProcess':
+                            _marcarEnProceso(context, mascota);
+                            break;
+                        }
                       },
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: 'edit',
+                          child: Text('Editar'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'adopted',
+                          child: Text('Marcar como adoptado'),
+                        ),
+                        const PopupMenuItem(
+                          value: 'inProcess',
+                          child: Text('Marcar en proceso de adopción'),
+                        ),
+                      ],
                     ),
                   ),
                 );
@@ -107,6 +142,44 @@ class PantallaMisPublicaciones extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
         ],
       ),
+    );
+  }
+
+  void _marcarComoAdoptado(BuildContext context, Mascota mascota) {
+    final mascotaActualizada = Mascota(
+      id: mascota.id,
+      nombre: mascota.nombre,
+      tipo: mascota.tipo,
+      raza: mascota.raza,
+      edad: mascota.edad,
+      imagen: mascota.imagen,
+      imagenBytes: mascota.imagenBytes,
+      descripcion: mascota.descripcion,
+      estado: 'Adoptado',
+      estadoAprobacion: mascota.estadoAprobacion,
+    );
+    Provider.of<PublicacionesProvider>(context, listen: false).actualizarMascota(mascotaActualizada);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('${mascota.nombre} marcado como adoptado')),
+    );
+  }
+
+  void _marcarEnProceso(BuildContext context, Mascota mascota) {
+    final mascotaActualizada = Mascota(
+      id: mascota.id,
+      nombre: mascota.nombre,
+      tipo: mascota.tipo,
+      raza: mascota.raza,
+      edad: mascota.edad,
+      imagen: mascota.imagen,
+      imagenBytes: mascota.imagenBytes,
+      descripcion: mascota.descripcion,
+      estado: 'En proceso',
+      estadoAprobacion: mascota.estadoAprobacion,
+    );
+    Provider.of<PublicacionesProvider>(context, listen: false).actualizarMascota(mascotaActualizada);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('${mascota.nombre} marcado en proceso de adopción')),
     );
   }
 }

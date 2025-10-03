@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
 import '../../modelos/mascota.dart';
 import '../../providers/favoritos_provider.dart';
+import '../../providers/publicaciones_provider.dart';
 import 'pantalla_detalle_mascota.dart';
 import 'pantalla_menu_usuario.dart';
 
@@ -14,59 +17,13 @@ class PantallaCatalogoMascotas extends StatefulWidget {
 }
 
 class _PantallaCatalogoMascotasState extends State<PantallaCatalogoMascotas> {
-  final List<Mascota> todasLasMascotas = [
-    Mascota(
-        id: 'max',
-        nombre: 'Max',
-        tipo: 'Perro',
-        raza: 'Golden Retriever',
-        edad: '4 años',
-        imagen: 'assets/images/max.png',
-        descripcion: 'Max es un perro cariñoso y juguetón.',
-        estado: 'Disponible'),
-    Mascota(
-        id: 'luna',
-        nombre: 'Luna',
-        tipo: 'Perro',
-        raza: 'Samoyedo',
-        edad: '3 años',
-        imagen: 'assets/images/luna.png',
-        descripcion: 'Luna es dulce y tranquila.',
-        estado: 'En proceso de adopción'),
-    Mascota(
-        id: 'rocky',
-        nombre: 'Rocky',
-        tipo: 'Perro',
-        raza: 'Labrador',
-        edad: '5 años',
-        imagen: 'assets/images/rocky.png',
-        descripcion: 'Rocky es muy activo.',
-        estado: 'Adoptado'),
-    Mascota(
-        id: 'milo',
-        nombre: 'Milo',
-        tipo: 'Gato',
-        raza: 'Gato doméstico',
-        edad: '2 años',
-        imagen: 'assets/images/milo.png',
-        descripcion: 'Milo es curioso y sociable.',
-        estado: 'En proceso'),
-    Mascota(
-        id: 'nube',
-        nombre: 'Nube',
-        tipo: 'Otro',
-        raza: 'Conejo',
-        edad: '1 año',
-        imagen: 'assets/images/nube.png',
-        descripcion: 'Nube es suave y silencioso.',
-        estado: 'Disponible'),
-  ];
 
   String filtroTipo = 'Todos';
   String textoBusqueda = '';
 
-  List<Mascota> get mascotasFiltradas {
+  List<Mascota> getMascotasFiltradas(List<Mascota> todasLasMascotas) {
     return todasLasMascotas.where((m) {
+      final esAprobada = m.estadoAprobacion == 'aprobada';
       final coincideBusqueda = m.nombre.toLowerCase().contains(textoBusqueda.toLowerCase()) ||
           m.raza.toLowerCase().contains(textoBusqueda.toLowerCase());
 
@@ -75,13 +32,16 @@ class _PantallaCatalogoMascotasState extends State<PantallaCatalogoMascotas> {
           (filtroTipo == 'Gatos' && m.tipo == 'Gato') ||
           (filtroTipo == 'Otros' && m.tipo == 'Otro');
 
-      return coincideBusqueda && coincideTipo;
+      return esAprobada && coincideBusqueda && coincideTipo;
     }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     final favoritosProvider = Provider.of<FavoritosProvider>(context);
+    final publicacionesProvider = Provider.of<PublicacionesProvider>(context);
+    final todasLasMascotas = publicacionesProvider.publicacionesAprobadas;
+    final mascotasFiltradas = getMascotasFiltradas(todasLasMascotas);
 
     return Scaffold(
       drawer: const PantallaMenuUsuario(),
@@ -136,13 +96,23 @@ class _PantallaCatalogoMascotasState extends State<PantallaCatalogoMascotas> {
                           elevation: 4,
                           margin: const EdgeInsets.symmetric(vertical: 10),
                           child: ListTile(
-                            leading: Image.asset(
-                              mascota.imagen,
-                              width: 60,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.pets),
-                            ),
+                            leading: mascota.imagenBytes != null
+                                ? Image.memory(
+                                    mascota.imagenBytes!,
+                                    width: 60,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) =>
+                                        const Icon(Icons.pets),
+                                  )
+                                : mascota.imagen.startsWith('assets')
+                                    ? Image.asset(
+                                        mascota.imagen,
+                                        width: 60,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error, stackTrace) =>
+                                            const Icon(Icons.pets),
+                                      )
+                                    : const Icon(Icons.pets),
                             title: Text(mascota.nombre),
                             subtitle: Text(
                                 '${mascota.raza} • ${mascota.edad} • ${mascota.estado}'),

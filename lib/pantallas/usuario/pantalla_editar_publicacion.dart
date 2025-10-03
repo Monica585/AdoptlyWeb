@@ -3,7 +3,9 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../../modelos/mascota.dart';
+import '../../providers/publicaciones_provider.dart';
 
 class PantallaEditarPublicacion extends StatefulWidget {
   final Mascota mascota;
@@ -71,10 +73,10 @@ class _PantallaEditarPublicacionState extends State<PantallaEditarPublicacion> {
       descripcion: descripcionController.text,
       estado: estadoSeleccionado,
     );
-    
-    // Aquí podrías actualizar la mascota en tu base de datos o provider
-    // Por ejemplo: Provider.of<PublicacionesProvider>(context, listen: false).actualizarMascota(mascotaActualizada);
-    
+
+    // Actualizar la mascota en el provider
+    Provider.of<PublicacionesProvider>(context, listen: false).actualizarMascota(mascotaActualizada);
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Cambios guardados')),
     );
