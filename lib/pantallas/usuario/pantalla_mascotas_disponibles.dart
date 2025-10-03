@@ -17,22 +17,45 @@ class PantallaMascotasDisponibles extends StatefulWidget {
 
 class _PantallaMascotasDisponiblesState
     extends State<PantallaMascotasDisponibles> {
+  final List<Mascota> mascotasEjemplo = [
+    Mascota(
+        id: '1',
+        nombre: 'Max',
+        tipo: 'Perro',
+        raza: 'Golden Retriever',
+        edad: '4 años',
+        imagen: 'assets/images/max.png',
+        descripcion: 'Max es un perro cariñoso y juguetón.',
+        estado: 'Disponible',
+        estadoAprobacion: 'aprobada'),
+    Mascota(
+        id: '5',
+        nombre: 'Nube',
+        tipo: 'Otro',
+        raza: 'Conejo',
+        edad: '1 año',
+        imagen: 'assets/images/nube.png',
+        descripcion: 'Nube es suave y silencioso.',
+        estado: 'Disponible',
+        estadoAprobacion: 'aprobada'),
+  ];
+
   String textoBusqueda = '';
 
-  List<Mascota> getMascotasDisponibles(List<Mascota> publicaciones) {
-    return publicaciones.where((m) {
+  List<Mascota> getMascotasDisponibles(List<Mascota> todasLasMascotas) {
+    return todasLasMascotas.where((m) {
       final esDisponible = m.estado.toLowerCase() == 'disponible';
-      final esAprobada = m.estadoAprobacion == 'aprobada';
       final coincideBusqueda = m.nombre.toLowerCase().contains(textoBusqueda.toLowerCase()) ||
           m.raza.toLowerCase().contains(textoBusqueda.toLowerCase());
-      return esDisponible && esAprobada && coincideBusqueda;
+      return esDisponible && coincideBusqueda;
     }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     final publicacionesProvider = Provider.of<PublicacionesProvider>(context);
-    final mascotasDisponibles = getMascotasDisponibles(publicacionesProvider.publicacionesAprobadas);
+    final todasLasMascotas = [...mascotasEjemplo, ...publicacionesProvider.publicacionesAprobadas];
+    final mascotasDisponibles = getMascotasDisponibles(todasLasMascotas);
 
     return Scaffold(
       drawer: const PantallaMenuUsuario(),

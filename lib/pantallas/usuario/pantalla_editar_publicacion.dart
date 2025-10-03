@@ -56,13 +56,21 @@ class _PantallaEditarPublicacionState extends State<PantallaEditarPublicacion> {
       return kIsWeb
           ? Image.memory(imagenWeb!, height: 150)
           : Image.file(File(nuevaImagen!.path), height: 150);
-    } else {
+    }
+
+    // Mostrar imagen original de la mascota
+    if (kIsWeb && widget.mascota.imagenBytes != null) {
+      return Image.memory(widget.mascota.imagenBytes!, height: 150);
+    } else if (!kIsWeb && widget.mascota.imagen.isNotEmpty && File(widget.mascota.imagen).existsSync()) {
+      return Image.file(File(widget.mascota.imagen), height: 150);
+    } else if (widget.mascota.imagen.startsWith('assets')) {
       return Image.asset(widget.mascota.imagen, height: 150, fit: BoxFit.cover);
+    } else {
+      return const Icon(Icons.image_not_supported, size: 100, color: Colors.grey);
     }
   }
 
   void guardarCambios() {
-    // Crear una nueva mascota con los datos actualizados
     final mascotaActualizada = Mascota(
       id: widget.mascota.id,
       nombre: nombreController.text,
@@ -70,11 +78,12 @@ class _PantallaEditarPublicacionState extends State<PantallaEditarPublicacion> {
       raza: razaController.text,
       edad: edadController.text,
       imagen: nuevaImagen != null ? nuevaImagen!.path : widget.mascota.imagen,
+      imagenBytes: nuevaImagen != null && kIsWeb ? imagenWeb : widget.mascota.imagenBytes,
       descripcion: descripcionController.text,
       estado: estadoSeleccionado,
+      estadoAprobacion: widget.mascota.estadoAprobacion,
     );
 
-    // Actualizar la mascota en el provider
     Provider.of<PublicacionesProvider>(context, listen: false).actualizarMascota(mascotaActualizada);
 
     ScaffoldMessenger.of(context).showSnackBar(

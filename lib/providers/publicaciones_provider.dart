@@ -8,6 +8,64 @@ class PublicacionesProvider with ChangeNotifier {
 
   PublicacionesProvider() {
     _loadPublicaciones();
+    _initializeDefaultPublicaciones();
+  }
+
+  Future<void> _initializeDefaultPublicaciones() async {
+    final prefs = await SharedPreferences.getInstance();
+    final hasInitialized = prefs.getBool('initialized') ?? false;
+    if (!hasInitialized) {
+      final defaultPublicaciones = [
+        Mascota(
+          id: '1',
+          nombre: 'Max',
+          tipo: 'Perro',
+          raza: 'Golden Retriever',
+          edad: '4 años',
+          imagen: 'assets/images/max.png',
+          descripcion: 'Max es un perro cariñoso y juguetón.',
+          estado: 'Disponible',
+          estadoAprobacion: 'aprobada',
+        ),
+        Mascota(
+          id: '2',
+          nombre: 'Bella',
+          tipo: 'Gato',
+          raza: 'Gato Persa',
+          edad: '2 años',
+          imagen: 'assets/images/bella.png',
+          descripcion: 'Bella es tranquila y elegante.',
+          estado: 'En proceso',
+          estadoAprobacion: 'aprobada',
+        ),
+        Mascota(
+          id: '3',
+          nombre: 'Rocky',
+          tipo: 'Perro',
+          raza: 'Labrador',
+          edad: '5 años',
+          imagen: 'assets/images/rocky.png',
+          descripcion: 'Rocky es muy activo.',
+          estado: 'Adoptado',
+          estadoAprobacion: 'aprobada',
+        ),
+        Mascota(
+          id: '4',
+          nombre: 'Luna',
+          tipo: 'Gato',
+          raza: 'Gato Siamés',
+          edad: '3 años',
+          imagen: 'assets/images/luna.png',
+          descripcion: 'Luna es dulce y curiosa.',
+          estado: 'Disponible',
+          estadoAprobacion: 'aprobada',
+        ),
+      ];
+      _publicaciones.addAll(defaultPublicaciones);
+      await _savePublicaciones();
+      await prefs.setBool('initialized', true);
+      notifyListeners();
+    }
   }
 
   Future<void> _loadPublicaciones() async {
