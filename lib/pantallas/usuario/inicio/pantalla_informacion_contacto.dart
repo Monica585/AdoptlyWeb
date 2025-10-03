@@ -16,7 +16,7 @@ class PantallaInformacionContacto extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 🟢 Título principal
+            // Título principal
             const Text(
               'Datos del contacto',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
