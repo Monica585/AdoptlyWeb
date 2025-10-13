@@ -25,7 +25,9 @@ class _PantallaPerfilState extends State<PantallaPerfil> {
           imagenSeleccionada = imagen;
         });
 
-        // Aquí podrías subir la imagen a Firebase Storage y guardar la URL
+        // Guardar la imagen en el provider para persistencia
+        final usuarioProvider = Provider.of<UsuarioProvider>(context, listen: false);
+        usuarioProvider.actualizarFoto(imagen.path);
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -43,8 +45,15 @@ class _PantallaPerfilState extends State<PantallaPerfil> {
       avatar = kIsWeb
           ? NetworkImage(imagenSeleccionada!.path)
           : FileImage(File(imagenSeleccionada!.path)) as ImageProvider;
-    } else if (usuario.fotoUrl != null) {
-      avatar = NetworkImage(usuario.fotoUrl!);
+    } else if (usuario.fotoUrl != null && usuario.fotoUrl!.isNotEmpty) {
+      // Verificar si es una URL o una ruta local
+      if (usuario.fotoUrl!.startsWith('http')) {
+        avatar = NetworkImage(usuario.fotoUrl!);
+      } else {
+        avatar = kIsWeb
+            ? NetworkImage(usuario.fotoUrl!)
+            : FileImage(File(usuario.fotoUrl!)) as ImageProvider;
+      }
     } else {
       avatar = const AssetImage('assets/images/sofia.png');
     }
@@ -81,7 +90,7 @@ class _PantallaPerfilState extends State<PantallaPerfil> {
                         color: Colors.white,
                       ),
                       padding: const EdgeInsets.all(4),
-                      child: const Icon(Icons.edit, size: 18, color: Colors.black),
+                      child: const Icon(Icons.camera_alt, size: 18, color: Colors.black),
                     ),
                   ],
                 ),

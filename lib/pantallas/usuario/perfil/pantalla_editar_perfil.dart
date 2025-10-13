@@ -43,8 +43,7 @@ class _PantallaEditarPerfilState extends State<PantallaEditarPerfil> {
         imagenSeleccionada = imagen;
       });
 
-      // Aquí podrías subir la imagen a tu backend o Firebase
-      // Por ahora solo se actualiza localmente
+      
     }
   }
 
@@ -115,7 +114,7 @@ class _PantallaEditarPerfilState extends State<PantallaEditarPerfil> {
                 ),
               ),
               const SizedBox(height: 20),
-              Text('@sofiag', style: TextStyle(color: Colors.grey[600])),
+              Text('',style: TextStyle(color: Colors.grey[600])),
               const SizedBox(height: 30),
               TextFormField(
                 controller: _nombreController,

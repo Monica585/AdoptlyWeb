@@ -22,7 +22,6 @@ class PantallaMenuUsuario extends StatelessWidget {
           _itemMenu(context, 'Mis solicitudes', Icons.assignment, '/misSolicitudes'),
           _itemMenu(context, 'Favoritos', Icons.favorite, '/favoritos'),
           _itemMenu(context, 'Perfil', Icons.person, '/perfil'),
-          _itemMenu(context, 'Centro de ayuda', Icons.help_outline, '/ayuda'),
           const Divider(),
           _itemMenu(context, 'Cerrar sesión', Icons.logout, '/login', cerrarSesion: true),
         ],
