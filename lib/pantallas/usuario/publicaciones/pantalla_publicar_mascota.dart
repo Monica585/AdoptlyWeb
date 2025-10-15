@@ -143,6 +143,7 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
             final usuarioProvider = Provider.of<UsuarioProvider>(context, listen: false);
             if (usuarioProvider.usuario != null) {
               usuarioProvider.usuario = Usuario(
+                id: usuarioProvider.usuario!.id,
                 nombre: usuarioProvider.usuario!.nombre,
                 correo: usuarioProvider.usuario!.correo,
                 contrasena: usuarioProvider.usuario!.contrasena,

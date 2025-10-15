@@ -14,6 +14,7 @@ class UsuariosProvider with ChangeNotifier {
     }
 
     final nuevoUsuario = Usuario(
+      id: 'u${DateTime.now().millisecondsSinceEpoch}',
       nombre: nombre,
       correo: correo,
       contrasena: contrasena,
@@ -38,5 +39,14 @@ class UsuariosProvider with ChangeNotifier {
   // Verificar si es admin
   bool esAdmin(String correo, String contrasena) {
     return correo == 'admin@adoptly.com' && contrasena == 'admin2015';
+  }
+
+  // Obtener usuario por ID
+  Usuario? getUsuarioById(String id) {
+    try {
+      return _usuarios.firstWhere((u) => u.id == id);
+    } catch (e) {
+      return null;
+    }
   }
 }

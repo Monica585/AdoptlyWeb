@@ -3,6 +3,7 @@ import '../modelos/usuario.dart';
 
 class UsuarioProvider with ChangeNotifier {
   Usuario _usuario = Usuario(
+    id: 'usuario_actual',
     nombre: 'Sofía',
     correo: 'sofia.perez@gmail.com',
     contrasena: 'password',

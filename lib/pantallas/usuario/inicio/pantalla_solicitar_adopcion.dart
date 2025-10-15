@@ -21,11 +21,15 @@ class _PantallaSolicitarAdopcionState extends State<PantallaSolicitarAdopcion> {
     if (_formKey.currentState!.validate()) {
       try {
         final solicitudesProvider = Provider.of<SolicitudesProvider>(context, listen: false);
+        // Aquí necesitaríamos obtener el ID del usuario actual y del publicador
+        // Por ahora usamos valores de ejemplo
         final solicitud = SolicitudAdopcion(
           id: 's${DateTime.now().millisecondsSinceEpoch}',
           mascota: widget.mascota,
           estado: EstadoSolicitud.pendiente,
           fecha: DateTime.now(),
+          idSolicitante: 'usuario_actual', // TODO: Obtener del provider de usuario
+          idPublicador: 'usuario_publicador', // TODO: Obtener del provider de publicaciones
         );
         solicitudesProvider.agregarSolicitud(solicitud);
         ScaffoldMessenger.of(context).showSnackBar(

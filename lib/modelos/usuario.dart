@@ -1,4 +1,5 @@
 class Usuario {
+  String id;
   String nombre;
   String correo;
   String contrasena;
@@ -7,6 +8,7 @@ class Usuario {
   String? ubicacion;
 
   Usuario({
+    required this.id,
     required this.nombre,
     required this.correo,
     required this.contrasena,

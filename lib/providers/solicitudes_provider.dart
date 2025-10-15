@@ -18,6 +18,8 @@ class SolicitudesProvider with ChangeNotifier {
       ),
       estado: EstadoSolicitud.pendiente,
       fecha: DateTime.now().subtract(const Duration(days: 2)),
+      idSolicitante: 'usuario1',
+      idPublicador: 'usuario2',
     ),
     SolicitudAdopcion(
       id: 's2',
@@ -33,6 +35,8 @@ class SolicitudesProvider with ChangeNotifier {
       ),
       estado: EstadoSolicitud.aprobada,
       fecha: DateTime.now().subtract(const Duration(days: 5)),
+      idSolicitante: 'usuario3',
+      idPublicador: 'usuario2',
     ),
   ];
 
@@ -42,30 +46,42 @@ class SolicitudesProvider with ChangeNotifier {
     return _solicitudes.where((s) => s.mascota.id == mascotaId).toList();
   }
 
-  void aprobarSolicitud(String mascotaId) {
-    final index = _solicitudes.indexWhere((s) => s.mascota.id == mascotaId && s.estado == EstadoSolicitud.pendiente);
+  void aprobarSolicitud(String solicitudId) {
+    final index = _solicitudes.indexWhere((s) => s.id == solicitudId && s.estado == EstadoSolicitud.pendiente);
     if (index != -1) {
       _solicitudes[index] = SolicitudAdopcion(
         id: _solicitudes[index].id,
         mascota: _solicitudes[index].mascota,
         estado: EstadoSolicitud.aprobada,
         fecha: _solicitudes[index].fecha,
+        idSolicitante: _solicitudes[index].idSolicitante,
+        idPublicador: _solicitudes[index].idPublicador,
       );
       notifyListeners();
     }
   }
 
-  void rechazarSolicitud(String mascotaId) {
-    final index = _solicitudes.indexWhere((s) => s.mascota.id == mascotaId && s.estado == EstadoSolicitud.pendiente);
+  void rechazarSolicitud(String solicitudId) {
+    final index = _solicitudes.indexWhere((s) => s.id == solicitudId && s.estado == EstadoSolicitud.pendiente);
     if (index != -1) {
       _solicitudes[index] = SolicitudAdopcion(
         id: _solicitudes[index].id,
         mascota: _solicitudes[index].mascota,
         estado: EstadoSolicitud.rechazada,
         fecha: _solicitudes[index].fecha,
+        idSolicitante: _solicitudes[index].idSolicitante,
+        idPublicador: _solicitudes[index].idPublicador,
       );
       notifyListeners();
     }
+  }
+
+  List<SolicitudAdopcion> solicitudesPorPublicador(String publicadorId) {
+    return _solicitudes.where((s) => s.idPublicador == publicadorId).toList();
+  }
+
+  List<SolicitudAdopcion> solicitudesPorSolicitante(String solicitanteId) {
+    return _solicitudes.where((s) => s.idSolicitante == solicitanteId).toList();
   }
 
   void agregarSolicitud(SolicitudAdopcion solicitud) {

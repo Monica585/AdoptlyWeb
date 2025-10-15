@@ -8,11 +8,15 @@ class SolicitudAdopcion {
   final Mascota mascota;
   final EstadoSolicitud estado;
   final DateTime fecha;
+  final String idSolicitante;
+  final String idPublicador;
 
   SolicitudAdopcion({
     required this.id,
     required this.mascota,
     required this.estado,
     required this.fecha,
+    required this.idSolicitante,
+    required this.idPublicador,
   });
 }
