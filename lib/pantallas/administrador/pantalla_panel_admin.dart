@@ -42,7 +42,30 @@ class PantallaPanelAdmin extends StatelessWidget {
           const SizedBox(height: 20),
           ElevatedButton.icon(
             onPressed: () {
-              Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Cerrar sesión'),
+                    content: const Text('¿Estás seguro de que quieres salir de tu cuenta?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Cierra el diálogo
+                        },
+                        child: const Text('Cancelar'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop(); // Cierra el diálogo
+                          Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                        },
+                        child: const Text('Salir'),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
             icon: const Icon(Icons.logout),
             label: const Text('Cerrar sesión'),

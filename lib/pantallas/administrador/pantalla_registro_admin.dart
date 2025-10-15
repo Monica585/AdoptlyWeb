@@ -45,18 +45,24 @@ class _PantallaRegistroAdminState extends State<PantallaRegistroAdmin> {
               const SizedBox(height: 30),
               TextFormField(
                 controller: _nombreController,
-                decoration: const InputDecoration(labelText: 'Nombre completo'),
+                decoration: const InputDecoration(
+                  labelText: 'Nombre completo',
+                  errorStyle: TextStyle(color: Colors.red),
+                ),
                 validator: (value) =>
-                    value == null || value.trim().isEmpty ? 'Ingresa el nombre' : null,
+                    value == null || value.trim().isEmpty ? 'Este campo es obligatorio' : null,
               ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: _correoController,
-                decoration: const InputDecoration(labelText: 'Correo electrónico'),
+                decoration: const InputDecoration(
+                  labelText: 'Correo electrónico',
+                  errorStyle: TextStyle(color: Colors.red),
+                ),
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Ingresa el correo';
+                    return 'Este campo es obligatorio';
                   }
                   if (!RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                     return 'Correo inválido';
@@ -67,10 +73,13 @@ class _PantallaRegistroAdminState extends State<PantallaRegistroAdmin> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _claveController,
-                decoration: const InputDecoration(labelText: 'Clave de acceso'),
+                decoration: const InputDecoration(
+                  labelText: 'Clave de acceso',
+                  errorStyle: TextStyle(color: Colors.red),
+                ),
                 obscureText: true,
                 validator: (value) =>
-                    value == null || value.length < 6 ? 'Mínimo 6 caracteres' : null,
+                    value == null || value.isEmpty ? 'Este campo es obligatorio' : (value.length < 6 ? 'Mínimo 6 caracteres' : null),
               ),
               const SizedBox(height: 40),
               ElevatedButton.icon(

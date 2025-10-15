@@ -43,6 +43,36 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
   XFile? imagenSeleccionada;
   final ImagePicker _picker = ImagePicker();
 
+  // Claves para los campos obligatorios
+  final _nombreKey = GlobalKey<FormFieldState>();
+  final _tipoKey = GlobalKey<FormFieldState>();
+  final _edadKey = GlobalKey<FormFieldState>();
+
+  FocusNode? _findFirstErrorField() {
+    if (_nombreKey.currentState?.hasError ?? false) {
+      final context = _nombreKey.currentState?.context;
+      if (context != null) {
+        Scrollable.ensureVisible(context);
+        return FocusNode();
+      }
+    }
+    if (_tipoKey.currentState?.hasError ?? false) {
+      final context = _tipoKey.currentState?.context;
+      if (context != null) {
+        Scrollable.ensureVisible(context);
+        return FocusNode();
+      }
+    }
+    if (_edadKey.currentState?.hasError ?? false) {
+      final context = _edadKey.currentState?.context;
+      if (context != null) {
+        Scrollable.ensureVisible(context);
+        return FocusNode();
+      }
+    }
+    return null;
+  }
+
   Future<void> seleccionarImagen() async {
     final XFile? imagen = await _picker.pickImage(source: ImageSource.gallery);
     if (imagen != null) {
@@ -54,6 +84,9 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
 
   void enviar() {
     if (!_formKey.currentState!.validate() || imagenSeleccionada == null) {
+      // Enfocar el primer campo con error
+      _findFirstErrorField();
+
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -69,6 +102,8 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
       );
       return;
     }
+
+    _formKey.currentState!.save();
 
     Navigator.push(
       context,
@@ -130,12 +165,14 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
   }
 
   Widget campoTexto(String label, TextEditingController controller,
-      {int maxLines = 1, String? Function(String?)? validator}) {
+      {int maxLines = 1, String? Function(String?)? validator, bool obligatorio = true, Key? key, TextInputType? keyboardType}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: TextFormField(
+        key: key,
         controller: controller,
         maxLines: maxLines,
+        keyboardType: keyboardType,
         decoration: InputDecoration(
           hintText: label,
           filled: true,
@@ -145,11 +182,15 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
             borderSide: BorderSide.none,
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          errorStyle: const TextStyle(color: Colors.red),
         ),
         validator: validator ??
-            ((value) => value == null || value.trim().isEmpty
-                ? 'Este campo es obligatorio'
-                : null),
+            ((value) {
+              if (obligatorio && (value == null || value.trim().isEmpty)) {
+                return 'Este campo es obligatorio';
+              }
+              return null;
+            }),
       ),
     );
   }
@@ -202,6 +243,7 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: DropdownButtonFormField<String>(
+        key: _tipoKey,
         value: tipoSeleccionado,
         items: const [
           DropdownMenuItem(value: 'Perro', child: Text('Perro')),
@@ -220,7 +262,14 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
             borderSide: BorderSide.none,
           ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          errorStyle: const TextStyle(color: Colors.red),
         ),
+        validator: (value) {
+          if (value == null || value.trim().isEmpty) {
+            return 'Este campo es obligatorio';
+          }
+          return null;
+        },
       ),
     );
   }
@@ -239,19 +288,20 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              campoTexto('Nombre del animal', nombreController),
+              campoTexto('Nombre del animal', nombreController, key: _nombreKey),
               campoTipoAnimal(),
               campoTexto('Raza', razaController),
 
-              // 🔹 CAMPO EDAD MODIFICADO: Ahora permite texto y número, solo valida que no esté vacío
+              // 🔹 CAMPO EDAD MODIFICADO: Permite números y letras (ej: "3 años")
               campoTexto(
                 'Edad',
                 edadController,
+                key: _edadKey,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'La edad es obligatoria';
+                    return 'Este campo es obligatorio';
                   }
-                  return null; // Permite número y texto
+                  return null; // Permite cualquier texto, incluyendo números y letras
                 },
               ),
 
@@ -263,7 +313,11 @@ class _PantallaPublicarMascotaState extends State<PantallaPublicarMascota> {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               campoTexto('Nombre', nombreContactoController),
-              campoTexto('Teléfono', telefonoController),
+              campoTexto('Teléfono', telefonoController, keyboardType: TextInputType.phone, validator: (value) {
+                if (value == null || value.trim().isEmpty) return 'Este campo es obligatorio';
+                if (!RegExp(r'^\d+$').hasMatch(value.trim())) return 'El teléfono debe contener solo números';
+                return null;
+              }),
               campoTexto('Correo Electrónico', correoController, validator: (value) {
                 if (value == null || value.trim().isEmpty) return 'El correo es obligatorio';
                 if (!emailRegExp.hasMatch(value.trim())) return 'Correo inválido';

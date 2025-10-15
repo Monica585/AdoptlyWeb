@@ -1,10 +1,7 @@
-﻿// Pantalla mejorada para que el administrador revise solicitudes de adopción pendientes
-// Incluye vista de lista con foto de mascota, datos básicos y modal de detalles completos
+﻿//  vista de lista con foto de mascota, datos básicos y modal de detalles completos
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/solicitudes_provider.dart';
-import '../../providers/usuarios_provider.dart';
-import '../../providers/publicaciones_provider.dart';
 import '../../providers/usuario_provider.dart';
 import '../../modelos/solicitudAdopcion.dart';
 
@@ -14,7 +11,7 @@ class PantallaSolicitudesAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final solicitudesProvider = Provider.of<SolicitudesProvider>(context);
-    final usuariosProvider = Provider.of<UsuariosProvider>(context);
+    // final usuariosProvider = Provider.of<UsuariosProvider>(context);
     final usuarioActual = Provider.of<UsuarioProvider>(context).usuario;
 
     // Filtrar solo solicitudes pendientes
@@ -35,7 +32,7 @@ class PantallaSolicitudesAdmin extends StatelessWidget {
               itemBuilder: (context, index) {
                 final solicitud = solicitudesPendientes[index];
 
-                // Card mejorada con foto, datos básicos y botones de acción
+                // foto, datos básicos y botones de acción
                 return Card(
                   margin: const EdgeInsets.only(bottom: 20),
                   elevation: 3,
@@ -43,7 +40,7 @@ class PantallaSolicitudesAdmin extends StatelessWidget {
                     onTap: () => _mostrarDetalleSolicitud(
                       context,
                       solicitud,
-                      usuarioActual, // Usar el usuario actual como solicitante por simplicidad
+                      usuarioActual, // Usar el usuario actual como solicitante 
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -310,7 +307,7 @@ class PantallaSolicitudesAdmin extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Título de la sección con color temático
+        // Título de la sección con color 
         Text(
           title,
           style: const TextStyle(

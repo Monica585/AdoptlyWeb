@@ -78,8 +78,11 @@ class _PantallaRegistroState extends State<PantallaRegistro> {
                 const Align(alignment: Alignment.centerLeft, child: Text("Nombre y Apellido")),
                 TextFormField(
                   controller: nombreController,
+                  decoration: const InputDecoration(
+                    errorStyle: TextStyle(color: Colors.red),
+                  ),
                   validator: (value) {
-                    if (value == null || value.trim().isEmpty) return 'El nombre es obligatorio';
+                    if (value == null || value.trim().isEmpty) return 'Este campo es obligatorio';
                     if (value.trim().length < 3) return 'Debe tener al menos 3 caracteres';
                     return null;
                   },
@@ -90,8 +93,11 @@ class _PantallaRegistroState extends State<PantallaRegistro> {
                 TextFormField(
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    errorStyle: TextStyle(color: Colors.red),
+                  ),
                   validator: (value) {
-                    if (value == null || value.trim().isEmpty) return 'El correo es obligatorio';
+                    if (value == null || value.trim().isEmpty) return 'Este campo es obligatorio';
                     if (!emailRegExp.hasMatch(value.trim())) return 'Correo inválido';
                     return null;
                   },
@@ -102,8 +108,16 @@ class _PantallaRegistroState extends State<PantallaRegistro> {
                 TextFormField(
                   controller: passwordController,
                   obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    hintText: '••••••••',
+                    errorStyle: const TextStyle(color: Colors.red),
+                    suffixIcon: IconButton(
+                      icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                    ),
+                  ),
                   validator: (value) {
-                    if (value == null || value.isEmpty) return 'La contraseña es obligatoria';
+                    if (value == null || value.isEmpty) return 'Este campo es obligatorio';
                     if (value.length < 8) return 'Debe tener al menos 8 caracteres';
                     if (!RegExp(r'[A-Z]').hasMatch(value)) return 'Debe contener al menos una mayúscula';
                     if (!RegExp(r'[a-z]').hasMatch(value)) return 'Debe contener al menos una minúscula';
@@ -111,13 +125,6 @@ class _PantallaRegistroState extends State<PantallaRegistro> {
                     if (!RegExp(r'[@$!%*?&]').hasMatch(value)) return 'Debe contener al menos un carácter especial';
                     return null;
                   },
-                  decoration: InputDecoration(
-                    hintText: '••••••••',
-                    suffixIcon: IconButton(
-                      icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
-                      onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                    ),
-                  ),
                 ),
 
                 const SizedBox(height: 20),

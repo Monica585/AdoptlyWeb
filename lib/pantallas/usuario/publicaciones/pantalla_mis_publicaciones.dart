@@ -120,34 +120,7 @@ class PantallaMisPublicaciones extends StatelessWidget {
                 );
               },
             ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 3,
-        selectedItemColor: const Color.fromARGB(255, 76, 172, 175),
-        unselectedItemColor: Colors.grey,
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              Navigator.pushReplacementNamed(context, '/home');
-              break;
-            case 1:
-              Navigator.pushReplacementNamed(context, '/buscar');
-              break;
-            case 2:
-              Navigator.pushReplacementNamed(context, '/favoritos');
-              break;
-            case 3:
-              Navigator.pushReplacementNamed(context, '/perfil');
-              break;
-          }
-        },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Buscar'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoritos'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
-        ],
-      ),
-    );
+   );
   }
 
   void _marcarComoAdoptado(BuildContext context, Mascota mascota) {

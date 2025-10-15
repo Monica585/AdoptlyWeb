@@ -16,6 +16,7 @@ class PantallaMenuUsuario extends StatelessWidget {
             decoration: const BoxDecoration(color: Color.fromARGB(255, 76, 172, 175)),
             child: Text(usuario?.nombre ?? 'Usuario', style: const TextStyle(fontSize: 24, color: Colors.white)),
           ),
+          const SizedBox(height: 10),
           _itemMenu(context, 'Inicio', Icons.home, '/home'),
           _itemMenu(context, 'Dar en adopción', Icons.add, '/publicarMascota'),
           _itemMenu(context, 'Mis publicaciones', Icons.article, '/misPublicaciones'),
@@ -36,7 +37,30 @@ class PantallaMenuUsuario extends StatelessWidget {
       onTap: () {
         Navigator.pop(context); // Cierra el menú
         if (cerrarSesion) {
-          Navigator.pushReplacementNamed(context, ruta);
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Cerrar sesión'),
+                content: const Text('¿Estás seguro de que quieres salir de tu cuenta?'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Cierra el diálogo
+                    },
+                    child: const Text('Cancelar'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Cierra el diálogo
+                      Navigator.pushReplacementNamed(context, ruta);
+                    },
+                    child: const Text('Salir'),
+                  ),
+                ],
+              );
+            },
+          );
         } else {
           Navigator.pushNamed(context, ruta);
         }

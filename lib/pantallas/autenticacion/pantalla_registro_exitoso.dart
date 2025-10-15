@@ -11,11 +11,10 @@ class PantallaRegistroExitoso extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(30),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Center(child: Image.asset('assets/images/logo_adoptly.png', height: 100)),
-              const SizedBox(height: 30),
+              const SizedBox(height: 100), // Espacio superior para subir el contenido
               const Icon(
                 Icons.check_circle,
                 color: Color.fromARGB(255, 76, 172, 175),

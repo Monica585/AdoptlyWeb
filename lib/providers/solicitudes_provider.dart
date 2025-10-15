@@ -69,6 +69,15 @@ class SolicitudesProvider with ChangeNotifier {
   }
 
   void agregarSolicitud(SolicitudAdopcion solicitud) {
+    // Verificar si ya existe una solicitud pendiente para esta mascota por el mismo usuario
+    final existeSolicitud = _solicitudes.any((s) =>
+        s.mascota.id == solicitud.mascota.id &&
+        s.estado == EstadoSolicitud.pendiente);
+
+    if (existeSolicitud) {
+      throw Exception('Ya tienes una solicitud pendiente para esta mascota');
+    }
+
     _solicitudes.add(solicitud);
     notifyListeners();
   }
