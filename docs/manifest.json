@@ -1,7 +1,7 @@
 {
     "name": "adoptly01",
     "short_name": "adoptly01",
-    "start_url": ".",
+    "start_url": "/AdoptlyWeb/",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
